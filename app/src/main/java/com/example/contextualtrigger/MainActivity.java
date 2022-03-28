@@ -6,14 +6,18 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import com.pradeep.notification_lib.NotificationBuilder;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private TextView textViewStepCounter;
@@ -84,6 +88,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             managerCompat.notify(2, builder.build());
 
         }
+
+        findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationBuilder.Companion.with(MainActivity.this).asBigText(bigText -> {
+                    bigText.setTitle("You have completed milestone one");
+                    bigText.setText("1000 steps completed");
+                    bigText.setExpandedText("");
+                    bigText.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
+                    return null;
+                }).show();
+            }
+        });
 
     }
 
