@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.os.Build
 
-/**
- * Provides compatibility functionality for the Notification channels introduced in Android O.
- */
+
 internal object NotificationChannelInterop {
     @SuppressLint("WrongConstant")
     fun with(alerting: Payload.Alerts): Boolean {
