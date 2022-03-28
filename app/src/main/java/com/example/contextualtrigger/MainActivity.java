@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
+        //Checker to ensure that if SDK Version is Oreo or higher that Channels are created.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","CalorieBurn",NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
@@ -38,11 +38,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
 
-
+        //Code for the step counter.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         textViewStepCounter = findViewById(R.id.textViewStepCounter);
         textTitle = "You've burned" + CalorieCounnt + " Calories!";
-        textContent = "Thats the same as ";
+        textContent = "Thats the same as an apple";
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
@@ -52,9 +52,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             textViewStepCounter.setText("Counter Sensor Not Found");
             isCounterSensorPresent = false;
         }
-
+        //Calorie Calcaulation
         CalorieCounnt = (int) (stepCount * 0.04);
 
+        if(CalorieCounnt > 52.00){
+
+        //Notification Builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"1")
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle(textTitle)
@@ -63,11 +66,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(1, builder.build());
-
-
+        }
 
     }
 
+    //Sensor setup, including code for when the application is closed and when it is open.
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(sensorEvent.sensor == mStepCounter){
@@ -95,5 +98,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
             sensorManager.unregisterListener(this,mStepCounter);
     }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
+            sensorManager.unregisterListener(this,mStepCounter);
+    }
+
 
 }
