@@ -2,9 +2,6 @@ package com.pradeep.notification_lib
 
 import androidx.annotation.IntDef
 
-/**
- * Denotes features which are considered experimental and are subject to change without notice.
- */
 annotation class Experimental
 
 @DslMarker
