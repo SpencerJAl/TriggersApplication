@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor mStepCounter;
     private boolean isCounterSensorPresent;
-    private String textTitle,textContent;
+    private String textTitle,textContent, textStep,textContext;
     int stepCount = 0;
     int CalorieCounnt = 0;
 
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Checker to ensure that if SDK Version is Oreo or higher that Channels are created.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","CalorieBurn",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel2 = new NotificationChannel("2","Monument",NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
@@ -42,7 +43,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         textViewStepCounter = findViewById(R.id.textViewStepCounter);
         textTitle = "You've burned" + CalorieCounnt + " Calories!";
-        textContent = "Thats the same as an apple";
+        textContent = "That's the same as an apple";
+
+        textStep = "You've walked " + stepCount + "steps!";
+        textContext = "That's the same as walking up the eiffel tower";
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
@@ -57,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if(CalorieCounnt > 52.00){
 
-        //Notification Builder
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"1")
+        //Calorie Counter Notification Builder
+         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"1")
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle(textTitle)
                 .setContentText(textContent)
@@ -66,6 +70,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(1, builder.build());
+        }
+
+        //Monument Notification Builder
+        if(stepCount > 1665 ){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"2")
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle(textStep)
+                    .setContentText(textContext)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(2, builder.build());
+
         }
 
     }
