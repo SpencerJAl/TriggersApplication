@@ -124,6 +124,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
             sensorManager.registerListener(this,mStepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+
+        NotiManager notiManager = new NotiManager();
+       // notiManager.sendNotification("1");
+       // try {
+           // Thread.sleep(60000);
+      //  }catch (InterruptedException e){
+
+       // }
+       // notiManager.sendNotification("2");
+
+       // try {
+       //     Thread.sleep(120000);
+      //  } catch (InterruptedException e){
+
+        //}
+
+       // notiManager.sendNotification("3");
     }
 
     @Override
