@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/gpmas/Desktop/Master Coursework/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/natha/AndroidStudioProjects/Triggers/app/src/main/res/drawable-anydpi/ic_walkIcon.xml" value="0.2205" />
+        <entry key="..\:/Users/natha/AndroidStudioProjects/Triggers/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2205" />
+        <entry key="..\:/Users/natha/AndroidStudioProjects/Triggers/app/src/main/res/drawable/notification_icon.xml" value="0.221" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.11666666666666667" />
       </map>
     </option>

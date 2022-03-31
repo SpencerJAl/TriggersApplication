@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String textTitle,textContent, textStep,textContext;
     int stepCount = 0;
     int CalorieCounnt = 0;
+    NotiManager notiManager;
 
 
     @Override
@@ -34,14 +35,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        notiManager = new NotiManager(this);
+        notiManager.sendNotification("1");
         //Checker to ensure that if SDK Version is Oreo or higher that Channels are created.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel("1","CalorieBurn",NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationChannel channel2 = new NotificationChannel("2","Monument",NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-            manager.createNotificationChannel(channel2);
-        }
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            //NotificationChannel channel = new NotificationChannel("1","CalorieBurn",NotificationManager.IMPORTANCE_DEFAULT);
+           // NotificationChannel channel2 = new NotificationChannel("2","Monument",NotificationManager.IMPORTANCE_DEFAULT);
+           // NotificationManager manager = getSystemService(NotificationManager.class);
+          //  manager.createNotificationChannel(channel);
+           // manager.createNotificationChannel(channel2);
+        //}
 
 
         //Code for the step counter.
@@ -124,23 +127,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
             sensorManager.registerListener(this,mStepCounter, SensorManager.SENSOR_DELAY_NORMAL);
-
-        NotiManager notiManager = new NotiManager();
-       // notiManager.sendNotification("1");
-       // try {
-           // Thread.sleep(60000);
-      //  }catch (InterruptedException e){
-
-       // }
-       // notiManager.sendNotification("2");
-
-       // try {
-       //     Thread.sleep(120000);
-      //  } catch (InterruptedException e){
-
-        //}
-
-       // notiManager.sendNotification("3");
     }
 
     @Override
