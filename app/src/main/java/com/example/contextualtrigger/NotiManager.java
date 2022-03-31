@@ -26,6 +26,10 @@ public class NotiManager {
             System.out.println(timeDelay);
             //need to find a way to add delay between noti's
             //Time Delay - Time Passed = time to actual delay.
+
+
+            //Comment from Alex- Could you not setup a second timer that count's down, run a if check and if time passed < time delay then you could go ahead and run it?
+            //Or am I misunderstanding the issue?
         }
 
         if (triggerName.equals("1")) {

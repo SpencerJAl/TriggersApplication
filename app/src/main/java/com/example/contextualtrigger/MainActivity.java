@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             NotificationChannel channel2 = new NotificationChannel("2","Monument",NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
+            manager.createNotificationChannel(channel2);
         }
 
 
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
             managerCompat.notify(2, builder.build());
-
         }
 
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
