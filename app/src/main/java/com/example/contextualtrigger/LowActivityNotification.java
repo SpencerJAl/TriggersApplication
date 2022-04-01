@@ -4,11 +4,11 @@ import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 
-public class CalorieNotification implements NotificationTemplate {
+public class LowActivityNotification implements NotificationTemplate{
 
     NotificationCompat.Builder notifyBuilder;
 
-    public CalorieNotification(Context context, String CHANNEL_ID, String title, String content){
+    public LowActivityNotification(Context context, String CHANNEL_ID, String title, String content){
         createBuilder(context, CHANNEL_ID,title,content);
     }
 
@@ -22,5 +22,4 @@ public class CalorieNotification implements NotificationTemplate {
     public NotificationCompat.Builder getNotificationBuilder(){
         return notifyBuilder;
     }
-
 }

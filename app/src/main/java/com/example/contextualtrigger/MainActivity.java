@@ -35,16 +35,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-        notiManager = new NotiManager(this);
-        notiManager.sendNotification("1");
-        //Checker to ensure that if SDK Version is Oreo or higher that Channels are created.
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            //NotificationChannel channel = new NotificationChannel("1","CalorieBurn",NotificationManager.IMPORTANCE_DEFAULT);
-           // NotificationChannel channel2 = new NotificationChannel("2","Monument",NotificationManager.IMPORTANCE_DEFAULT);
-           // NotificationManager manager = getSystemService(NotificationManager.class);
-          //  manager.createNotificationChannel(channel);
-           // manager.createNotificationChannel(channel2);
-        //}
+        notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notifiaction manager, it makes sure that there is only ever 1 instance of it.
+        notiManager.sendNotification("1", "Calories Burned", "Well done you have burned x calories keep going.");
+        //notiManager.sendNotification("2", "Monument Achieved", "Well done you have completed enough steps to walk up x.");
+        //notiManager.sendNotification("3", "Low Activity!", "Get up and go for a walk, haven't moved in some time!");
+        //notiManager.sendNotification("4", "Perfect Weather Conditions", "The weather is excellent for a walk lets hit that goal of x.");
+        //notiManager.sendNotification("5", "Location is Perfect", "You are in an excellent location to go for a walk.");
+
+
 
 
         //Code for the step counter.
