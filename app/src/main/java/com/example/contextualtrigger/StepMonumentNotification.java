@@ -4,11 +4,11 @@ import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 
-public class CalorieNotification implements NotificationTemplate {
+public class StepMonumentNotification implements NotificationTemplate{
 
     NotificationCompat.Builder notifyBuilder;
 
-    public CalorieNotification(Context context, String CHANNEL_ID, String title, String content){
+    public StepMonumentNotification(Context context, String CHANNEL_ID, String title, String content){
         createBuilder(context, CHANNEL_ID,title,content);
     }
 
@@ -17,10 +17,8 @@ public class CalorieNotification implements NotificationTemplate {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.notification_icon);
-
     }
     public NotificationCompat.Builder getNotificationBuilder(){
         return notifyBuilder;
     }
-
 }
