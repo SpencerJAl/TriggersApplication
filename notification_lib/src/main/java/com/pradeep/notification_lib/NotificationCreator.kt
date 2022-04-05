@@ -89,6 +89,10 @@ class NotificationCreator internal constructor(private val notify: NotificationB
         return notify.show(null, asBuilder())
     }
 
+    fun setWork() {
+        notify.setWork()
+    }
+
 
     @Deprecated(message = "Exposes function under the incorrect API -- NotifyCreator is reserved strictly for notification construction.",
         replaceWith = ReplaceWith(

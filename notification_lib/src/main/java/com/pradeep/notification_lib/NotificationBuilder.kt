@@ -3,6 +3,11 @@ package com.pradeep.notification_lib
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 
 class NotificationBuilder internal constructor(internal var context: Context){
 
@@ -74,5 +79,24 @@ class NotificationBuilder internal constructor(internal var context: Context){
 
     internal fun show(id: Int?, builder: NotificationCompat.Builder): Int {
         return NotificationInterop.showNotification(defaultConfig.notificationManager!!, id, builder)
+    }
+
+    internal fun setWork() {
+        //1st notification
+        val data = Data.Builder().putInt("appName_notification_id_1", 0).build()
+        val delay = 5L
+        scheduleNotification(delay, data)
+
+        val data1 = Data.Builder().putInt("appName_notification_id_2", 0).build()
+        val delay1 = 40L
+        scheduleNotification(delay1, data1)
+    }
+
+    private fun scheduleNotification(delay: Long, data: Data) {
+        val notificationWork = OneTimeWorkRequest.Builder(NotifyWork::class.java)
+            .setInitialDelay(delay, TimeUnit.SECONDS).setInputData(data).build()
+        val instanceWorkManager = WorkManager.getInstance(context)
+        instanceWorkManager.beginUniqueWork("appName_notification_work_$delay", ExistingWorkPolicy.REPLACE, notificationWork)
+            .enqueue()
     }
 }
