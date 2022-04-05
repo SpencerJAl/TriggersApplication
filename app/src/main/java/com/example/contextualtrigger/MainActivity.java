@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NotificationBuilder.Companion.with(MainActivity.this).setWork();
         getSupportActionBar().hide();
         notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notifiaction manager, it makes sure that there is only ever 1 instance of it.
         notiManager.sendNotification("1", "Calories Burned", "Well done you have burned x calories keep going.");
