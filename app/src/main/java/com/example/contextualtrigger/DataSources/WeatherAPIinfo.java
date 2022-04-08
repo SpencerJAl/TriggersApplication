@@ -1,58 +1,63 @@
 package com.example.contextualtrigger.DataSources;
 
-import android.app.IntentService;
-import android.app.PendingIntent;
-import android.content.Intent;
 
-import androidx.annotation.Nullable;
+import android.content.Context;
 
-import java.io.IOException;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class WeatherAPIinfo extends IntentService {
+public class WeatherAPIinfo {
 
-    private static final String TAG = WeatherAPIinfo.class.getSimpleName();
-    public static final String PENDING_RESULT_EXTRA = "pending_result";
-
-
-
-    public WeatherAPIinfo() {
-        super(TAG);
-
-    }
-
-    /**
-     * @param intent
-     * @deprecated
-     */
-    @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        PendingIntent reply = intent.getParcelableExtra(PENDING_RESULT_EXTRA);
+    private static int CITYID = 21125;
 
 
+    public WeatherAPIinfo(Context mainContext) {
 
+        RequestQueue queue = Volley.newRequestQueue(mainContext);
+        String url = "https://www.metaweather.com/api/location/" + CITYID;
 
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
+            /**
+             * Called when a response is received.
+             *
+             * @param response
+             */
+            @Override
+            public void onResponse(JSONObject response) {
+                System.out.println(response.toString());
+                try {
+                    JSONArray weather = response.getJSONArray("consolidated_weather");
 
-        OkHttpClient client = new OkHttpClient();
+                    JSONObject day1 = (JSONObject) weather.get(0);
 
-        Request request = new Request.Builder()
-                .url("https://community-open-weather-map.p.rapidapi.com/weather?q=Glasgow%2Cuk&lat=55.864239&lon=-4.251806&callback=test&id=2172797&lang=null&units=imperial&mode=xml")
-                .get()
-                .addHeader("X-RapidAPI-Host", "community-open-weather-map.p.rapidapi.com")
-                .addHeader("X-RapidAPI-Key", "6e8e440a0emsh02c377a05b16ec2p15b1e8jsn1c98da9bea6d")
-                .build();
+                    String weatherState = day1.getString("weather_state_name");
+                    String weatherDate = day1.getString("applicable_date");
 
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    System.out.println("State:" + weatherState);
+                    System.out.println("Date" + weatherDate);
 
-        System.out.println(response);
+                }catch (JSONException E){
+                    E.printStackTrace();
+                }
 
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        queue.add(request);
     }
 }

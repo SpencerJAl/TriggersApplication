@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             managerCompat.notify(2, builder.build());
         }
 
+        WeatherAPIinfo w = new WeatherAPIinfo(this);
+
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
