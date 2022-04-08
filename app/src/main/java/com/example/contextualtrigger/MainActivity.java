@@ -4,20 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.example.contextualtrigger.DataSources.WeatherAPIinfo;
 import com.pradeep.notification_lib.NotificationBuilder;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private TextView textViewStepCounter;
@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int stepCount = 0;
     int CalorieCounnt = 0;
     NotiManager notiManager;
+    //private RequestQueue queue;
 
 
     @Override
@@ -42,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //notiManager.sendNotification("3", "Low Activity!", "Get up and go for a walk, haven't moved in some time!");
         //notiManager.sendNotification("4", "Perfect Weather Conditions", "The weather is excellent for a walk lets hit that goal of x.");
         //notiManager.sendNotification("5", "Location is Perfect", "You are in an excellent location to go for a walk.");
-
-
 
 
         //Code for the step counter.
@@ -90,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
             managerCompat.notify(2, builder.build());
         }
+
+        WeatherAPIinfo w = new WeatherAPIinfo(this);
 
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,14 +1,17 @@
-package com.example.contextualtrigger;
+package com.example.contextualtrigger.Notifications;
 
 import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 
-public class GoodWeatherNotification implements NotificationTemplate{
+import com.example.contextualtrigger.Interfaces.NotificationTemplate;
+import com.example.contextualtrigger.R;
+
+public class LocationNotification implements NotificationTemplate {
 
     NotificationCompat.Builder notifyBuilder;
 
-    public GoodWeatherNotification(Context context, String CHANNEL_ID, String title, String content){
+    public LocationNotification(Context context, String CHANNEL_ID, String title, String content){
         createBuilder(context, CHANNEL_ID,title,content);
     }
 

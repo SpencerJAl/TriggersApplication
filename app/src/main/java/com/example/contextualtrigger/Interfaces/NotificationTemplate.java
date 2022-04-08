@@ -1,4 +1,4 @@
-package com.example.contextualtrigger;
+package com.example.contextualtrigger.Interfaces;
 
 import android.content.Context;
 
