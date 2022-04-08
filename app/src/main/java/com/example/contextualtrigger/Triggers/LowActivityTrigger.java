@@ -1,8 +1,11 @@
-package com.example.contextualtrigger;
+package com.example.contextualtrigger.Triggers;
 
 import android.content.Context;
 
-public class LowActivityTrigger implements TriggerTemplate{
+import com.example.contextualtrigger.NotiManager;
+import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+
+public class LowActivityTrigger implements TriggerTemplate {
 
     Context MainContext;
 

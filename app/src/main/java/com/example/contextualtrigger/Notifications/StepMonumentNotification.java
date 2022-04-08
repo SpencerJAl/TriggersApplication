@@ -1,10 +1,13 @@
-package com.example.contextualtrigger;
+package com.example.contextualtrigger.Notifications;
 
 import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 
-public class StepMonumentNotification implements NotificationTemplate{
+import com.example.contextualtrigger.Interfaces.NotificationTemplate;
+import com.example.contextualtrigger.R;
+
+public class StepMonumentNotification implements NotificationTemplate {
 
     NotificationCompat.Builder notifyBuilder;
 

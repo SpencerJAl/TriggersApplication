@@ -5,11 +5,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+
+import com.example.contextualtrigger.Notifications.CalorieNotification;
+import com.example.contextualtrigger.Notifications.GoodWeatherNotification;
+import com.example.contextualtrigger.Notifications.LocationNotification;
+import com.example.contextualtrigger.Notifications.LowActivityNotification;
+import com.example.contextualtrigger.Notifications.StepMonumentNotification;
 
 import java.time.LocalDateTime;
 
