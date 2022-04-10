@@ -15,9 +15,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.contextualtrigger.DataSources.WeatherAPIinfo;
+import com.example.contextualtrigger.Database.TriggerDatabase;
+import com.example.contextualtrigger.Triggers.GoodWeatherTrigger;
 import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private TextView textViewStepCounter;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int stepCount = 0;
     int CalorieCounnt = 0;
     NotiManager notiManager;
+    TriggerDatabase DB;
     //private RequestQueue queue;
 
 
@@ -38,11 +42,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         NotificationBuilder.Companion.with(MainActivity.this).setWork();
         getSupportActionBar().hide();
         notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notifiaction manager, it makes sure that there is only ever 1 instance of it.
-        notiManager.sendNotification("1", "Calories Burned", "Well done you have burned x calories keep going.");
-        //notiManager.sendNotification("2", "Monument Achieved", "Well done you have completed enough steps to walk up x.");
-        //notiManager.sendNotification("3", "Low Activity!", "Get up and go for a walk, haven't moved in some time!");
-        //notiManager.sendNotification("4", "Perfect Weather Conditions", "The weather is excellent for a walk lets hit that goal of x.");
-        //notiManager.sendNotification("5", "Location is Perfect", "You are in an excellent location to go for a walk.");
+
+
+        DB = TriggerDatabase.getInstance(getApplicationContext());
 
 
         //Code for the step counter.
@@ -91,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         WeatherAPIinfo w = new WeatherAPIinfo(this);
+
+        GoodWeatherTrigger gd = new GoodWeatherTrigger(this);
+        gd.getTriggerData();
 
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override

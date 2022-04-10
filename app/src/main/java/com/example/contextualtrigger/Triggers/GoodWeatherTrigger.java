@@ -2,12 +2,17 @@ package com.example.contextualtrigger.Triggers;
 
 import android.content.Context;
 
+import com.example.contextualtrigger.Database.TriggerDatabase;
+import com.example.contextualtrigger.Database.WeatherTable;
 import com.example.contextualtrigger.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+
+import java.util.List;
 
 public class GoodWeatherTrigger implements TriggerTemplate {
 
     Context MainContext;
+    TriggerDatabase triggerDatabase;
 
     public GoodWeatherTrigger(Context context){
         MainContext = context;
@@ -15,6 +20,10 @@ public class GoodWeatherTrigger implements TriggerTemplate {
 
     @Override
     public void getTriggerData() {
+        triggerDatabase = TriggerDatabase.getInstance(MainContext);
+        List<WeatherTable> weather = triggerDatabase.weatherDao().getWeather();
+
+        System.out.println("Printed in trigger: " + weather.get(1).getCurrentTemp());
 
     }
 
