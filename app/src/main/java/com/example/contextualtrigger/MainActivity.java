@@ -16,11 +16,9 @@ import android.widget.TextView;
 
 import com.example.contextualtrigger.DataSources.WeatherAPIinfo;
 import com.example.contextualtrigger.Database.TriggerDatabase;
+import com.example.contextualtrigger.Notifications.NotiManager;
 import com.example.contextualtrigger.Triggers.GoodWeatherTrigger;
 import com.pradeep.notification_lib.NotificationBuilder;
-
-import java.io.IOException;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private TextView textViewStepCounter;
@@ -147,6 +145,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
             sensorManager.unregisterListener(this,mStepCounter);
     }
-
 
 }

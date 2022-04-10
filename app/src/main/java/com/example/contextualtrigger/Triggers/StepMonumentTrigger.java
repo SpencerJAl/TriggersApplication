@@ -2,7 +2,7 @@ package com.example.contextualtrigger.Triggers;
 
 import android.content.Context;
 
-import com.example.contextualtrigger.NotiManager;
+import com.example.contextualtrigger.Notifications.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
 public class StepMonumentTrigger implements TriggerTemplate {

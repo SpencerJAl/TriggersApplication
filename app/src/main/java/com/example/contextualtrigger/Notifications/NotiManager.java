@@ -1,4 +1,4 @@
-package com.example.contextualtrigger;
+package com.example.contextualtrigger.Notifications;
 
 
 import android.app.NotificationChannel;
@@ -7,12 +7,6 @@ import android.content.Context;
 import android.graphics.Color;
 
 import androidx.core.app.NotificationCompat;
-
-import com.example.contextualtrigger.Notifications.CalorieNotification;
-import com.example.contextualtrigger.Notifications.GoodWeatherNotification;
-import com.example.contextualtrigger.Notifications.LocationNotification;
-import com.example.contextualtrigger.Notifications.LowActivityNotification;
-import com.example.contextualtrigger.Notifications.StepMonumentNotification;
 
 import java.time.LocalDateTime;
 
