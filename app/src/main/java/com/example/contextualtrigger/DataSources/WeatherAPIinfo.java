@@ -2,6 +2,8 @@ package com.example.contextualtrigger.DataSources;
 
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,42 +25,40 @@ import java.util.List;
 
 public class WeatherAPIinfo {
 
-    private static int CITYID = 21125;
+    Context MainContext;
     TriggerDatabase triggerDatabase;
 
+    private static int CITYID = 21125; //ID of the city glasgow
 
     public WeatherAPIinfo(Context mainContext) {
+        MainContext = mainContext;
+        if (isOnline()) {
+            RequestQueue queue = Volley.newRequestQueue(mainContext);
+            String url = "https://www.metaweather.com/api/location/" + CITYID;
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                public void onResponse(JSONObject response) {
+                    try {
+                        JSONArray weather = response.getJSONArray("consolidated_weather");
 
-        RequestQueue queue = Volley.newRequestQueue(mainContext);
-        String url = "https://www.metaweather.com/api/location/" + CITYID;
+                        JSONObject day1 = (JSONObject) weather.get(0);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
-            /**
-             * Called when a response is received.
-             *
-             * @param response
-             */
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray weather = response.getJSONArray("consolidated_weather");
+                        storeWeatherData(day1, mainContext);
+                    } catch (JSONException E) {
+                        E.printStackTrace();
+                    }
 
-                    JSONObject day1 = (JSONObject) weather.get(0);
-
-                    storeWeatherData(day1,mainContext);
-                }catch (JSONException E){
-                    E.printStackTrace();
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                }
+            });
 
-            }
-        });
+            queue.add(request);
+        }else {
 
-        queue.add(request);
+        }
     }
 
 
@@ -88,7 +88,6 @@ public class WeatherAPIinfo {
             E.printStackTrace();
         }
 
-
         if(findDate(weather,weatherJSON)){
             triggerDatabase.weatherDao().updateCurrentWeather(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
         } else {
@@ -110,5 +109,11 @@ public class WeatherAPIinfo {
             }
         }
         return false;
+    }
+
+    private boolean isOnline(){
+        ConnectivityManager connMgr = (ConnectivityManager) MainContext.getSystemService(MainContext.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }
