@@ -11,14 +11,20 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.contextualtrigger.Database.TriggerDatabase;
+import com.example.contextualtrigger.Database.WeatherTable;
+import com.example.contextualtrigger.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class WeatherAPIinfo {
 
     private static int CITYID = 21125;
+    TriggerDatabase triggerDatabase;
 
 
     public WeatherAPIinfo(Context mainContext) {
@@ -34,18 +40,12 @@ public class WeatherAPIinfo {
              */
             @Override
             public void onResponse(JSONObject response) {
-                System.out.println(response.toString());
                 try {
                     JSONArray weather = response.getJSONArray("consolidated_weather");
 
                     JSONObject day1 = (JSONObject) weather.get(0);
 
-                    String weatherState = day1.getString("weather_state_name");
-                    String weatherDate = day1.getString("applicable_date");
-
-                    System.out.println("State:" + weatherState);
-                    System.out.println("Date" + weatherDate);
-
+                    storeWeatherData(day1,mainContext);
                 }catch (JSONException E){
                     E.printStackTrace();
                 }
@@ -59,5 +59,56 @@ public class WeatherAPIinfo {
         });
 
         queue.add(request);
+    }
+
+
+    private void storeWeatherData(JSONObject weatherJSON, Context context){
+        triggerDatabase = TriggerDatabase.getInstance(context);
+        List<WeatherTable> weather = triggerDatabase.weatherDao().getWeather();
+
+
+        String desc = "";
+        double minTemp = 0.0;
+        double maxTemp = 0.0;
+        double currentTemp = 0.0;
+        int humidity = 0;
+        double visibility = 0.0;
+        String date = "";
+
+        try {
+            desc = weatherJSON.getString("weather_state_name");
+            minTemp = weatherJSON.getDouble("min_temp");
+            maxTemp = weatherJSON.getDouble("max_temp");
+            currentTemp = weatherJSON.getDouble("the_temp");
+            humidity = weatherJSON.getInt("humidity");
+            visibility = weatherJSON.getDouble("visibility");
+            date= weatherJSON.getString("applicable_date");
+
+        }catch (JSONException E){
+            E.printStackTrace();
+        }
+
+
+        if(findDate(weather,weatherJSON)){
+            triggerDatabase.weatherDao().updateCurrentWeather(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
+        } else {
+            WeatherTable newEntry = new WeatherTable(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
+            triggerDatabase.weatherDao().insertWeather(newEntry);
+        }
+
+    }
+
+    private boolean findDate(List<WeatherTable> weather, JSONObject weatherJSON){
+        if(weather.size() == 0){ return true;}
+        for(int i = 0; i < weather.size(); i++){
+            try {
+                if(weather.get(i).getDate().equals(weatherJSON.getString("applicable_date"))){
+                    return true;
+                }
+            }catch (JSONException E){
+                E.printStackTrace();
+            }
+        }
+        return false;
     }
 }
