@@ -24,7 +24,6 @@ public class AlarmHandler {
             long runEvery = 60 * 60 * 1000; //Every hour
             am.setRepeating(AlarmManager.RTC_WAKEUP, runAfter, runEvery, sender);
         }
-
     }
 
     public void  cancelAlarmManager(){
@@ -34,6 +33,5 @@ public class AlarmHandler {
         if(am != null) {
             am.cancel(sender);
         }
-
     }
 }
