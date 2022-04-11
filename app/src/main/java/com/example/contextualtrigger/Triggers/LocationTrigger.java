@@ -14,7 +14,7 @@ public class LocationTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void getTriggerData() {
+    public void getTriggerData(Context context) {
 
     }
 

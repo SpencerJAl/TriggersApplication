@@ -15,7 +15,7 @@ public class StepMonumentTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void getTriggerData() {
+    public void getTriggerData(Context context) {
 
     }
 

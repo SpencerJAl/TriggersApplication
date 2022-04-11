@@ -1,7 +1,9 @@
 package com.example.contextualtrigger.DataSources;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -16,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Database.WeatherTable;
 import com.example.contextualtrigger.MainActivity;
+import com.example.contextualtrigger.Triggers.GoodWeatherTrigger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class WeatherAPIinfo {
+public class WeatherAPIinfo extends BroadcastReceiver {
 
     Context MainContext;
     TriggerDatabase triggerDatabase;
@@ -32,8 +35,17 @@ public class WeatherAPIinfo {
 
     public WeatherAPIinfo(Context mainContext) {
         MainContext = mainContext;
+        fetchDataFromApi();
+
+    }
+
+    public WeatherAPIinfo(){
+
+    }
+
+    private  synchronized void fetchDataFromApi(){
         if (isOnline()) {
-            RequestQueue queue = Volley.newRequestQueue(mainContext);
+            RequestQueue queue = Volley.newRequestQueue(MainContext);
             String url = "https://www.metaweather.com/api/location/" + CITYID;
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                 public void onResponse(JSONObject response) {
@@ -42,7 +54,7 @@ public class WeatherAPIinfo {
 
                         JSONObject day1 = (JSONObject) weather.get(0);
 
-                        storeWeatherData(day1, mainContext);
+                        storeWeatherData(day1, MainContext);
                     } catch (JSONException E) {
                         E.printStackTrace();
                     }
@@ -62,10 +74,9 @@ public class WeatherAPIinfo {
     }
 
 
-    private void storeWeatherData(JSONObject weatherJSON, Context context){
+    private synchronized void storeWeatherData(JSONObject weatherJSON, Context context){
         triggerDatabase = TriggerDatabase.getInstance(context);
         List<WeatherTable> weather = triggerDatabase.weatherDao().getWeather();
-
 
         String desc = "";
         double minTemp = 0.0;
@@ -95,10 +106,13 @@ public class WeatherAPIinfo {
             triggerDatabase.weatherDao().insertWeather(newEntry);
         }
 
+        GoodWeatherTrigger gd = new GoodWeatherTrigger(context);
+        gd.getTriggerData(MainContext);
+
     }
 
     private boolean findDate(List<WeatherTable> weather, JSONObject weatherJSON){
-        if(weather.size() == 0){ return true;}
+        if(weather.size() == 0){ return false;}
         for(int i = 0; i < weather.size(); i++){
             try {
                 if(weather.get(i).getDate().equals(weatherJSON.getString("applicable_date"))){
@@ -115,5 +129,11 @@ public class WeatherAPIinfo {
         ConnectivityManager connMgr = (ConnectivityManager) MainContext.getSystemService(MainContext.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        MainContext = context;
+        fetchDataFromApi();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Database.WeatherTable;
+import com.example.contextualtrigger.MainActivity;
 import com.example.contextualtrigger.Notifications.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
@@ -20,25 +21,29 @@ public class GoodWeatherTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void getTriggerData() {
-        triggerDatabase = TriggerDatabase.getInstance(MainContext);
-        currentWeather = triggerDatabase.weatherDao().getWeather();
-        checkTriggerData();
+    public void getTriggerData(Context context) {
+        triggerDatabase = TriggerDatabase.getInstance(context);
+        try {
+            currentWeather = triggerDatabase.weatherDao().getWeather();
+            checkTriggerData();
+        }catch (NullPointerException e){
+            System.out.println("Nothing Stored will try later.....");
+        }
     }
 
     @Override
     public void checkTriggerData() {
-        Double current_Temp = currentWeather.get(0).getCurrentTemp();
-        String current_Conditions = currentWeather.get(0).getWeatherDesc();
+        if(currentWeather.size() > 0) {
+            Double current_Temp = currentWeather.get(0).getCurrentTemp();
+            String current_Conditions = currentWeather.get(0).getWeatherDesc();
 
-        System.out.println(current_Conditions);
-
-        if(current_Temp > 10.0){
-            if(current_Conditions.equals("Light Cloud") || current_Conditions.equals("Clear")){
-                informNotificationManager();
+            if (current_Temp > 10.0) {
+                if (current_Conditions.equals("Light Cloud") || current_Conditions.equals("Clear") || current_Conditions.equals("Heavy Cloud")) {
+                    informNotificationManager();
+                }
             }
         }
-    }
+        }
 
     @Override
     public void informNotificationManager() {

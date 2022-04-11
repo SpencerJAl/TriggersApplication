@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.example.contextualtrigger.AlarmManager.AlarmHandler;
 import com.example.contextualtrigger.DataSources.WeatherAPIinfo;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Notifications.NotiManager;
@@ -90,10 +91,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             managerCompat.notify(2, builder.build());
         }
 
-        WeatherAPIinfo w = new WeatherAPIinfo(this);
 
-        GoodWeatherTrigger gd = new GoodWeatherTrigger(this);
-        gd.getTriggerData();
+        AlarmHandler alarmHandler = new AlarmHandler(this);
+        alarmHandler.cancelAlarmManager();
+        alarmHandler.setAlarmManager();
 
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override
