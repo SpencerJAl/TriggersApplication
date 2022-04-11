@@ -16,7 +16,7 @@ public class CalorieTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void getTriggerData() {
+    public void getTriggerData(Context context) {
 
     }
 

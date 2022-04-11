@@ -14,7 +14,7 @@ public class LowActivityTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void getTriggerData() {
+    public void getTriggerData(Context context) {
 
     }
 
