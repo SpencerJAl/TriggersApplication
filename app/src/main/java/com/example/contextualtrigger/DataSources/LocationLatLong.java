@@ -16,6 +16,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.example.contextualtrigger.Database.LocationTable;
+import com.example.contextualtrigger.Database.TriggerDatabase;
+import com.example.contextualtrigger.Database.WeatherTable;
+import com.example.contextualtrigger.Triggers.LocationTrigger;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 public class LocationLatLong extends BroadcastReceiver implements LocationListener {
@@ -24,8 +32,12 @@ public class LocationLatLong extends BroadcastReceiver implements LocationListen
     protected LocationListener locationListener;
     private int LOCATION_PERMISSION_CODE = 1;
     private Context MainContext;
+    TriggerDatabase triggerDatabase;
 
 
+
+
+    //Using the in-built location sensors it get the lat and long of the user
     public void getCurrentLocation(Context context) {
         MainContext = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -43,17 +55,44 @@ public class LocationLatLong extends BroadcastReceiver implements LocationListen
             Longitude = lastKnownLocation.getLongitude();
         }
 
-        System.out.println(Longitude + " : " + Latitude);
+        storeLocations(context,Latitude, Longitude);
+    }
+
+    //Store the lat and long into the database
+    private void storeLocations(Context context, double Latitude, double Longitude){
+        String date = getDate();
+        triggerDatabase = TriggerDatabase.getInstance(context);
+        List<LocationTable> locations = triggerDatabase.locationDao().getTodayLocations(date);
+
+        if(locations.size() == 0){
+            LocationTable entry = new LocationTable(Latitude,Longitude,date);
+            triggerDatabase.locationDao().insertLocation(entry);
+        } else if (locations.size() > 0){
+            if(locations.get(0).getNewLat() == 0.0 && locations.get(0).getNewLng() == 0.0){
+                triggerDatabase.locationDao().updateNewLatLng(Latitude,Longitude,date);
+            } else {
+                System.out.println("In the switch lat and lng");
+                triggerDatabase.locationDao().updateAllLatLng(locations.get(0).getNewLat(), locations.get(0).getNewLng(), Latitude,Longitude, date);
+            }
+        }
+
+        //System.out.println("1st Lat" + location.get(0).getLat() + " 1st Lng" + location.get(0).getLng() + " 2nd New Lat" + location.get(0).getNewLat() + " 2nd New Lng" + location.get(0).getNewLng() + " Date" + location.get(0).getDate());
+        //System.out.println(Longitude + " : " + Latitude);
+
+        LocationTrigger lc = new LocationTrigger(context);
+        lc.getTriggerData(context);
     }
 
 
     @Override
+    //This is called by the alarm manager when the time has been reached to execute this (i.e an hour has gone by)
     public void onReceive(Context context, Intent intent) {
         getCurrentLocation(context);
     }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
+
 
     }
 
@@ -70,6 +109,15 @@ public class LocationLatLong extends BroadcastReceiver implements LocationListen
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
+    }
+
+    //Gets the Current date and returns it
+    public String getDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+
+        return date;
     }
 
 }

@@ -43,6 +43,8 @@ public class WeatherAPIinfo extends BroadcastReceiver {
 
     }
 
+    //Gets the current weather from an api
+    //Current hard coded to glasgow (will change to use lat and long)
     private  synchronized void fetchDataFromApi(){
         if (isOnline()) {
             RequestQueue queue = Volley.newRequestQueue(MainContext);
@@ -74,6 +76,7 @@ public class WeatherAPIinfo extends BroadcastReceiver {
     }
 
 
+    //Stores the weather info into the database
     private synchronized void storeWeatherData(JSONObject weatherJSON, Context context){
         triggerDatabase = TriggerDatabase.getInstance(context);
         List<WeatherTable> weather = triggerDatabase.weatherDao().getWeather();
@@ -125,6 +128,7 @@ public class WeatherAPIinfo extends BroadcastReceiver {
         return false;
     }
 
+    //Checks to see if the device has an internet connection
     private boolean isOnline(){
         ConnectivityManager connMgr = (ConnectivityManager) MainContext.getSystemService(MainContext.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -132,6 +136,7 @@ public class WeatherAPIinfo extends BroadcastReceiver {
     }
 
     @Override
+    //This is called by the alarm manager when the time has been reached to execute this (i.e an hour has gone by)
     public void onReceive(Context context, Intent intent) {
         MainContext = context;
         fetchDataFromApi();
