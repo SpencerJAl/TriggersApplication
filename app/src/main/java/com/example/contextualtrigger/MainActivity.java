@@ -1,9 +1,17 @@
 package com.example.contextualtrigger;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,8 +21,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.contextualtrigger.AlarmManager.AlarmHandler;
+import com.example.contextualtrigger.DataSources.LocationLatLong;
 import com.example.contextualtrigger.DataSources.WeatherAPIinfo;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Notifications.NotiManager;
@@ -29,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String textTitle,textContent, textStep,textContext;
     int stepCount = 0;
     int CalorieCounnt = 0;
+    private int LOCATION_PERMISSION_CODE = 1;
     NotiManager notiManager;
     TriggerDatabase DB;
     //private RequestQueue queue;
@@ -109,42 +120,75 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-    }
-
-    //Sensor setup, including code for when the application is closed and when it is open.
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor == mStepCounter){
-            stepCount = (int) sensorEvent.values[0];
-            textViewStepCounter.setText(String.valueOf(stepCount));
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            requestLocationPermission();
+            System.out.println("In first permission");
         }
-
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
+    private void requestLocationPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)){
+            new AlertDialog.Builder(this).setTitle("Permission Needed").setMessage("Allow location permission ?").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_CODE);
+                }
+            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            }).create().show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_CODE);
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
-            sensorManager.registerListener(this,mStepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+            }
+        }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
-            sensorManager.unregisterListener(this,mStepCounter);
-    }
 
-    @Override
-    protected void onStop(){
-        super.onStop();
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
-            sensorManager.unregisterListener(this,mStepCounter);
-    }
+            //Sensor setup, including code for when the application is closed and when it is open.
+            @Override
+            public void onSensorChanged (SensorEvent sensorEvent){
+                if (sensorEvent.sensor == mStepCounter) {
+                    stepCount = (int) sensorEvent.values[0];
+                    textViewStepCounter.setText(String.valueOf(stepCount));
+                }
 
-}
+            }
+
+            @Override
+            public void onAccuracyChanged (Sensor sensor,int i){
+
+            }
+
+            @Override
+            protected void onResume () {
+                super.onResume();
+                if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null)
+                    sensorManager.registerListener(this, mStepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+
+            @Override
+            protected void onPause () {
+                super.onPause();
+                if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null)
+                    sensorManager.unregisterListener(this, mStepCounter);
+            }
+
+            @Override
+            protected void onStop () {
+                super.onStop();
+                if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null)
+                    sensorManager.unregisterListener(this, mStepCounter);
+            }
+
+        }
