@@ -22,6 +22,7 @@ public class GoodWeatherTrigger implements TriggerTemplate {
 
     @Override
     public void getTriggerData(Context context) {
+        //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
         try {
             currentWeather = triggerDatabase.weatherDao().getWeather();
@@ -33,10 +34,12 @@ public class GoodWeatherTrigger implements TriggerTemplate {
 
     @Override
     public void checkTriggerData() {
+        //checks if the weather has been retrieved
         if(currentWeather.size() > 0) {
             Double current_Temp = currentWeather.get(0).getCurrentTemp();
             String current_Conditions = currentWeather.get(0).getWeatherDesc();
 
+            //if there is weather data, check to see if the temp > 10 and is one of the weather conditions.
             if (current_Temp > 10.0) {
                 if (current_Conditions.equals("Light Cloud") || current_Conditions.equals("Clear") || current_Conditions.equals("Heavy Cloud")) {
                     informNotificationManager();

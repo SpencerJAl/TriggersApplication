@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {StepTable.class,WeatherTable.class}, exportSchema = false, version = 2)
+@Database(entities = {StepTable.class,WeatherTable.class,LocationTable.class}, exportSchema = false, version = 3)
 public abstract class TriggerDatabase extends RoomDatabase {
 
     private static final String DB_Name = "triggerDatabase";
@@ -22,5 +22,7 @@ public abstract class TriggerDatabase extends RoomDatabase {
     public abstract StepDao stepDao();
 
     public abstract WeatherDao weatherDao();
+
+    public abstract LocationDao locationDao();
 
 }

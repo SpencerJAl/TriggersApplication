@@ -51,10 +51,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         NotificationBuilder.Companion.with(MainActivity.this).setWork();
         getSupportActionBar().hide();
+
+        //sets up the notification manager
         notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notifiaction manager, it makes sure that there is only ever 1 instance of it.
 
 
+        //sets up the database
         DB = TriggerDatabase.getInstance(getApplicationContext());
+
+        //Sets up the alarm manager when the application is first ran
+        AlarmHandler alarmHandler = new AlarmHandler(this);
+        alarmHandler.cancelAlarmManager();
+        alarmHandler.setAlarmManager();
 
 
         //Code for the step counter.
@@ -102,11 +110,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             managerCompat.notify(2, builder.build());
         }
 
-
-        AlarmHandler alarmHandler = new AlarmHandler(this);
-        alarmHandler.cancelAlarmManager();
-        alarmHandler.setAlarmManager();
-
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    //Used to request location permission's from the user
     private void requestLocationPermission(){
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)){
             new AlertDialog.Builder(this).setTitle("Permission Needed").setMessage("Allow location permission ?").setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -144,12 +148,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    //needs to be implemented in order to check the permissions
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
             }
         }
     }
