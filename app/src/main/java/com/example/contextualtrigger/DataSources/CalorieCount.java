@@ -7,7 +7,7 @@ public class CalorieCount {
     StepCount stepCount;
     double CalorieCount;
 
-    CalorieCount = stepCount * 0.04;
+    //CalorieCount = stepCount * 0.04;
 
 
 }

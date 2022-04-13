@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
@@ -21,9 +22,12 @@ import android.widget.TextView;
 
 import com.example.contextualtrigger.AlarmManager.AlarmHandler;
 import com.example.contextualtrigger.DataSources.StepCount;
+import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Notifications.NotiManager;
 import com.pradeep.notification_lib.NotificationBuilder;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
     private TextView textViewStepCounter;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity{
 
         //sets up the database
         DB = TriggerDatabase.getInstance(getApplicationContext());
+        List<StepTable> list = DB.stepDao().getSteps();
 
         //Sets up the alarm manager when the application is first ran
         AlarmHandler alarmHandler = new AlarmHandler(this);
@@ -61,19 +66,24 @@ public class MainActivity extends AppCompatActivity{
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //Adds the step counter to the front end UI (From StepCount)
         textViewStepCounter = findViewById(R.id.textViewStepCounter);
-        counter = stepCount;
-        textViewStepCount = Integer.toString(counter);
-        ((TextView)textViewStepCounter).setText(textViewStepCount);
+        textViewStepCounter.setText("Counter Sensor Found");
+        //counter = stepCount;
+        //textViewStepCount = Integer.toString(counter);
+        //((TextView)textViewStepCounter).setText(textViewStepCount);
 
         //Determines if the sensor is found on the phone.
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
-            mStepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            isCounterSensorPresent = true;
-        }else{
-            textViewStepCounter.setText("Counter Sensor Not Found");
-            isCounterSensorPresent = false;
-        }
+        //sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        //if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
+         //   mStepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+          //  isCounterSensorPresent = true;
+           // textViewStepCounter.setText("Counter Sensor Found");
+        //}else{
+         //   textViewStepCounter.setText("Counter Sensor Not Found");
+          //  isCounterSensorPresent = false;
+        //}
+
+
+
 
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,4 +132,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

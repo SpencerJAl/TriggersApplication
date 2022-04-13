@@ -29,6 +29,8 @@
             android:exported="true"/>
         <receiver android:name=".DataSources.LocationLatLong"
             android:exported="true"/>
+        <receiver android:name=".BroadcastReceiver.StepCountReceiver"
+            android:exported="true"/>
     </application>
 
 </manifest>

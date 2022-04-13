@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class WeatherAPIinfo extends BroadcastReceiver {
@@ -79,7 +81,7 @@ public class WeatherAPIinfo extends BroadcastReceiver {
     //Stores the weather info into the database
     private synchronized void storeWeatherData(JSONObject weatherJSON, Context context){
         triggerDatabase = TriggerDatabase.getInstance(context);
-        List<WeatherTable> weather = triggerDatabase.weatherDao().getWeather();
+        List<WeatherTable> weather = triggerDatabase.weatherDao().getWeatherByDate(getDate());
 
         String desc = "";
         double minTemp = 0.0;
@@ -96,13 +98,15 @@ public class WeatherAPIinfo extends BroadcastReceiver {
             currentTemp = weatherJSON.getDouble("the_temp");
             humidity = weatherJSON.getInt("humidity");
             visibility = weatherJSON.getDouble("visibility");
-            date= weatherJSON.getString("applicable_date");
+            date = getDate();
 
         }catch (JSONException E){
             E.printStackTrace();
         }
 
-        if(findDate(weather,weatherJSON)){
+        System.out.println(desc + " " + minTemp + " " + maxTemp + " " + currentTemp + " " + humidity + " " + visibility + " " + date);
+
+        if(findDate(weather,getDate())){
             triggerDatabase.weatherDao().updateCurrentWeather(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
         } else {
             WeatherTable newEntry = new WeatherTable(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
@@ -114,16 +118,12 @@ public class WeatherAPIinfo extends BroadcastReceiver {
 
     }
 
-    private boolean findDate(List<WeatherTable> weather, JSONObject weatherJSON){
+    private boolean findDate(List<WeatherTable> weather, String current_date){
         if(weather.size() == 0){ return false;}
         for(int i = 0; i < weather.size(); i++){
-            try {
-                if(weather.get(i).getDate().equals(weatherJSON.getString("applicable_date"))){
+                if(weather.get(i).getDate().equals(current_date)){
                     return true;
                 }
-            }catch (JSONException E){
-                E.printStackTrace();
-            }
         }
         return false;
     }
@@ -140,5 +140,14 @@ public class WeatherAPIinfo extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         MainContext = context;
         fetchDataFromApi();
+    }
+
+    //Gets the Current date and returns it
+    public String getDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+
+        return date;
     }
 }
