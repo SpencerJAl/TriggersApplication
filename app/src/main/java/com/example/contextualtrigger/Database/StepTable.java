@@ -12,25 +12,24 @@ public class StepTable {
     private int id;
 
     @ColumnInfo(name = "StepCount")
-    private int steps;
+    private int StepCount;
 
     @ColumnInfo(name = "Target")
-    private int target;
+    private int Target;
 
     @ColumnInfo(name = "date")
     private String date;
 
 
     public StepTable(int steps, int target, String date) {
-        this.steps = steps;
-        this.target = target;
+        this.StepCount = steps;
+        this.Target = target;
         this.date = date;
     }
 
     public StepTable(){
 
     }
-
 
     public int getId() {
         return id;
@@ -40,20 +39,20 @@ public class StepTable {
         this.id = id;
     }
 
-    public int getSteps() {
-        return steps;
+    public int getStepCount() {
+        return StepCount;
     }
 
-    public void setSteps(int steps) {
-        this.steps = steps;
+    public void setStepCount(int stepCount) {
+        StepCount = stepCount;
     }
 
     public int getTarget() {
-        return target;
+        return Target;
     }
 
     public void setTarget(int target) {
-        this.target = target;
+        Target = target;
     }
 
     public String getDate() {

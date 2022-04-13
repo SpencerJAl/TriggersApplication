@@ -8,6 +8,8 @@ import com.example.contextualtrigger.MainActivity;
 import com.example.contextualtrigger.Notifications.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class GoodWeatherTrigger implements TriggerTemplate {
@@ -25,7 +27,7 @@ public class GoodWeatherTrigger implements TriggerTemplate {
         //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
         try {
-            currentWeather = triggerDatabase.weatherDao().getWeather();
+            currentWeather = triggerDatabase.weatherDao().getWeatherByDate(getDate());
             checkTriggerData();
         }catch (NullPointerException e){
             System.out.println("Nothing Stored will try later.....");
@@ -41,7 +43,7 @@ public class GoodWeatherTrigger implements TriggerTemplate {
 
             //if there is weather data, check to see if the temp > 10 and is one of the weather conditions.
             if (current_Temp > 10.0) {
-                if (current_Conditions.equals("Light Cloud") || current_Conditions.equals("Clear") || current_Conditions.equals("Heavy Cloud")) {
+                if (current_Conditions.equals("Light Cloud") || current_Conditions.equals("Clear") || current_Conditions.equals("Heavy Cloud") || true) {
                     informNotificationManager();
                 }
             }
@@ -52,5 +54,15 @@ public class GoodWeatherTrigger implements TriggerTemplate {
     public void informNotificationManager() {
         NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
         notiManager.sendNotification("4", "Perfect Weather Conditions", "The weather is excellent for a walk");
+    }
+
+
+    //Gets the Current date and returns it
+    public String getDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+
+        return date;
     }
 }

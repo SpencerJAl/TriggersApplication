@@ -17,6 +17,16 @@ public interface StepDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertSteps(StepTable stepTable);
 
+    @Query("SELECT * FROM Steps WHERE date=:current_date")
+    List<StepTable> getStepsFromDate(String current_date);
+
+    @Query("UPDATE Steps SET StepCount=:newCount WHERE date=:current_date")
+    void updateStep(int newCount, String current_date);
+
+
+
+
+
 
 }
 
