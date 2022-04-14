@@ -54,8 +54,8 @@ public class NotiManager {
             calcTimeDifference();
         }
         if (timePassed < timeDelay & !initialNotification) { //if the time that has passed isnt as much as the delay then sleep.
-            System.out.println(timePassed);
-            System.out.println(timeDelay);
+            //System.out.println(timePassed);
+            //System.out.println(timeDelay);
             //need to find a way to add delay between noti's
             //Time Delay - Time Passed = time to actual delay.
 
