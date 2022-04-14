@@ -25,6 +25,7 @@ import com.example.contextualtrigger.DataSources.StepCount;
 import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Notifications.NotiManager;
+import com.example.contextualtrigger.Triggers.TriggerManager;
 import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.util.List;
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity{
         AlarmHandler alarmHandler = new AlarmHandler(this);
         alarmHandler.cancelAlarmManager();
         alarmHandler.setAlarmManager();
+
+        TriggerManager triggerManager = new TriggerManager(this);
+        triggerManager.startTriggerWorkers();
 
 
         //Code for the step counter.
@@ -100,7 +104,6 @@ public class MainActivity extends AppCompatActivity{
 
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             requestLocationPermission();
-            System.out.println("In first permission");
         }
     }
 

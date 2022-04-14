@@ -24,6 +24,7 @@ public class GoodWeatherTrigger implements TriggerTemplate {
 
     @Override
     public void getTriggerData(Context context) {
+        System.out.println("In weather trigger");
         //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
         try {

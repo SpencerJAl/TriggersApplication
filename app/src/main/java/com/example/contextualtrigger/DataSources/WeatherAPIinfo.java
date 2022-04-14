@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.contextualtrigger.Database.LocationTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Database.WeatherTable;
 import com.example.contextualtrigger.MainActivity;
@@ -33,11 +34,10 @@ public class WeatherAPIinfo extends BroadcastReceiver {
     Context MainContext;
     TriggerDatabase triggerDatabase;
 
-    private static int CITYID = 21125; //ID of the city glasgow
+    private static int CITYID = 0; //ID of the city glasgow
 
     public WeatherAPIinfo(Context mainContext) {
         MainContext = mainContext;
-        fetchDataFromApi();
 
     }
 
@@ -45,10 +45,47 @@ public class WeatherAPIinfo extends BroadcastReceiver {
 
     }
 
+    //Uses the current known location stored and send that to the API
+    //to get the ID to use in order to get the weather for the user's
+    //current location.
+    private synchronized void fetchLocationIDFromApi(){
+        triggerDatabase = TriggerDatabase.getInstance(MainContext);
+        List<LocationTable> locations = triggerDatabase.locationDao().getTodayLocations(getDate());
+
+        if(locations.size() == 0){
+            fetchWeatherFromApi();
+            System.out.println("No locations, will try later....");
+        } else {
+            if(isOnline()){
+                RequestQueue queue = Volley.newRequestQueue(MainContext);
+                String url = "https://www.metaweather.com/api/location/search/?lattlong=" + locations.get(0).getLat() +","+ locations.get(0).getLng();
+                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url,null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject cityInfo = response.getJSONObject(0);
+                            CITYID = Integer.valueOf(cityInfo.getString("woeid"));
+                        } catch (JSONException E){
+                            E.printStackTrace();
+                        }
+                        fetchWeatherFromApi();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+                queue.add(request);
+            }
+        }
+    }
+
     //Gets the current weather from an api
     //Current hard coded to glasgow (will change to use lat and long)
-    private  synchronized void fetchDataFromApi(){
-        if (isOnline()) {
+    private  synchronized void fetchWeatherFromApi(){
+        if (isOnline() && CITYID != 0) {
             RequestQueue queue = Volley.newRequestQueue(MainContext);
             String url = "https://www.metaweather.com/api/location/" + CITYID;
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -70,7 +107,6 @@ public class WeatherAPIinfo extends BroadcastReceiver {
 
                 }
             });
-
             queue.add(request);
         }else {
 
@@ -104,7 +140,6 @@ public class WeatherAPIinfo extends BroadcastReceiver {
             E.printStackTrace();
         }
 
-        System.out.println(desc + " " + minTemp + " " + maxTemp + " " + currentTemp + " " + humidity + " " + visibility + " " + date);
 
         if(findDate(weather,getDate())){
             triggerDatabase.weatherDao().updateCurrentWeather(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
@@ -112,10 +147,6 @@ public class WeatherAPIinfo extends BroadcastReceiver {
             WeatherTable newEntry = new WeatherTable(desc,minTemp,maxTemp,currentTemp,humidity,visibility,date);
             triggerDatabase.weatherDao().insertWeather(newEntry);
         }
-
-        GoodWeatherTrigger gd = new GoodWeatherTrigger(context);
-        gd.getTriggerData(MainContext);
-
     }
 
     private boolean findDate(List<WeatherTable> weather, String current_date){
@@ -139,7 +170,7 @@ public class WeatherAPIinfo extends BroadcastReceiver {
     //This is called by the alarm manager when the time has been reached to execute this (i.e an hour has gone by)
     public void onReceive(Context context, Intent intent) {
         MainContext = context;
-        fetchDataFromApi();
+        fetchLocationIDFromApi();
     }
 
     //Gets the Current date and returns it

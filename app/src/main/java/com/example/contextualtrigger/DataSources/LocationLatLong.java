@@ -70,9 +70,6 @@ public class LocationLatLong extends BroadcastReceiver implements LocationListen
                 triggerDatabase.locationDao().updateAllLatLng(locations.get(0).getNewLat(), locations.get(0).getNewLng(), Latitude,Longitude, date);
             }
         }
-
-        LocationTrigger lc = new LocationTrigger(context);
-        lc.getTriggerData(context);
     }
 
 
