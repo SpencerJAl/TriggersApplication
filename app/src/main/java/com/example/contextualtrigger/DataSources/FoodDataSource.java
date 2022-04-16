@@ -1,5 +1,7 @@
 package com.example.contextualtrigger.DataSources;
 
+import com.example.contextualtrigger.CustomDataTypes.Food;
+
 import java.util.ArrayList;
 
 public class FoodDataSource {

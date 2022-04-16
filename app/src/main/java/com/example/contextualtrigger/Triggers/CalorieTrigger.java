@@ -2,10 +2,11 @@ package com.example.contextualtrigger.Triggers;
 
 import android.content.Context;
 
-import com.example.contextualtrigger.DataSources.Food;
+import com.example.contextualtrigger.CustomDataTypes.Food;
+import com.example.contextualtrigger.DataSources.FoodDataSource;
 import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
-import com.example.contextualtrigger.Notifications.NotiManager;
+import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
 import java.time.LocalDateTime;
@@ -34,23 +35,26 @@ public class CalorieTrigger implements TriggerTemplate {
         //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
         try {
-            LastestStep = triggerDatabase.stepDao().getStepByDate(getDate());
+            LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
             checkTriggerData();
         }catch (NullPointerException e){
             System.out.println("Nothing Stored will try later.....");
         }
+
+        FoodDataSource foodData = new FoodDataSource();
+        food = foodData.getFood();
     }
 
     @Override
     public void checkTriggerData() {
-        Calories =  stepcount * 0.04;
+        Calories = stepcount * 0.04;
         for(int i = 1, j = 0; i < food.size(); i++, j++){
             // Check if step counter is greater then monument, if it is then it continues to the next monument.
-            if(Calories < food.get(i).Calorie){
+            if(Calories < food.get(i).getCalorie()){
                 System.out.println("Too Many Steps for this monument");
             }else{
                 //Sets the monument name from the previous monument
-                Food = food.get(j).Name;
+                Food = food.get(j).getName();
                 System.out.println("Too Many Steps for this monument");
             }
         }

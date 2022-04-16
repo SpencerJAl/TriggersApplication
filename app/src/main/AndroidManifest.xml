@@ -29,7 +29,7 @@
             android:exported="true"/>
         <receiver android:name=".DataSources.LocationLatLong"
             android:exported="true"/>
-        <receiver android:name=".BroadcastReceiver.StepCountReceiver"
+        <receiver android:name=".DataSources.StepCountReceiver"
             android:exported="true"/>
     </application>
 

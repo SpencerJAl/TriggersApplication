@@ -1,5 +1,7 @@
 package com.example.contextualtrigger.DataSources;
 
+import com.example.contextualtrigger.CustomDataTypes.MonList;
+
 import java.util.ArrayList;
 
 public class MonumentList {
@@ -31,5 +33,9 @@ public class MonumentList {
         MonList.add(f6);
         MonList.add(f7);
         MonList.add(f8);
+    }
+
+    public ArrayList<MonList> getMonList(){
+        return MonList;
     }
 }

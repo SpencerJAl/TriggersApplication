@@ -4,8 +4,7 @@ import android.content.Context;
 
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Database.WeatherTable;
-import com.example.contextualtrigger.MainActivity;
-import com.example.contextualtrigger.Notifications.NotiManager;
+import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
 import java.time.LocalDateTime;

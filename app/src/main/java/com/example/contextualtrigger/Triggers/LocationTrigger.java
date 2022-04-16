@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.contextualtrigger.Database.LocationTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
-import com.example.contextualtrigger.Notifications.NotiManager;
+import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
 import java.math.RoundingMode;

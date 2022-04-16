@@ -1,20 +1,20 @@
-package com.example.contextualtrigger.AlarmManager;
+package com.example.contextualtrigger.Managers;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.contextualtrigger.BroadcastReceiver.StepCountReceiver;
+import com.example.contextualtrigger.DataSources.StepCountReceiver;
 import com.example.contextualtrigger.DataSources.LocationLatLong;
 import com.example.contextualtrigger.DataSources.WeatherAPIinfo;
 import com.example.contextualtrigger.DataSources.StepCount;
 
-public class AlarmHandler {
+public class DataSourceManager {
 
     private Context context;
 
-    public AlarmHandler(Context context) {
+    public DataSourceManager(Context context) {
         this.context = context;
     }
 
