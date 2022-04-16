@@ -44,10 +44,9 @@ public class LocationTrigger implements TriggerTemplate {
 
             checkTriggerData();
 
-        } catch (NullPointerException e){
+        } catch (NullPointerException | IndexOutOfBoundsException e){
             System.out.println("Nothing Stored will try later.....");
         }
-
     }
 
     @Override

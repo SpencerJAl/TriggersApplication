@@ -27,6 +27,8 @@ import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Managers.TriggerManager;
 import com.pradeep.notification_lib.NotificationBuilder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
@@ -50,11 +52,12 @@ public class MainActivity extends AppCompatActivity{
         getSupportActionBar().hide();
 
         //sets up the notification manager
-        notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notifiaction manager, it makes sure that there is only ever 1 instance of it.
+        notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notification manager, it makes sure that there is only ever 1 instance of it.
 
         //sets up the database
         DB = TriggerDatabase.getInstance(getApplicationContext());
-        List<StepTable> list = DB.stepDao().getSteps();
+        insertDummyData();
+
 
         //Sets up the alarm manager when the application is first ran
         DataSourceManager dataSourceManager = new DataSourceManager(this);
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity{
 
         //Sets up the Trigger manager when application is first ran
         TriggerManager triggerManager = new TriggerManager(this);
+        triggerManager.clearAllWork();
         triggerManager.startTriggerWorkers();
 
 
@@ -135,8 +139,30 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    private void insertDummyData(){
+        TriggerDatabase db = TriggerDatabase.getInstance(MainActivity.this);
+        List<StepTable> stepTable = db.stepDao().getStepsFromDate(getDate());
+        System.out.println("Table size" + stepTable.size());
+
+        if(stepTable.size() == 0){
+            StepTable entry = new StepTable(5000, 10000, getDate());
+            DB.stepDao().insertSteps(entry);
+        } else if (stepTable.size() > 0){
+            System.out.println(stepTable.get(0).getStepCount());
+            DB.stepDao().updateStep(5000, getDate());
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    public String getDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+
+        return date;
     }
 }

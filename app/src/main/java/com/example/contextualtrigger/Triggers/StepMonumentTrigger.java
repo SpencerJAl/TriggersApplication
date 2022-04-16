@@ -17,8 +17,7 @@ public class StepMonumentTrigger implements TriggerTemplate {
 
     Context MainContext;
     TriggerDatabase triggerDatabase;
-    public String MonumentItem;
-    int stepcount = 0;
+    public String MonumentItem = "None";
     List<MonList> monumentList;
     List<StepTable> LastestStep;
 
@@ -34,15 +33,12 @@ public class StepMonumentTrigger implements TriggerTemplate {
         System.out.println("In monument trigger");
         //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
-        try {
-            LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
-            checkTriggerData();
-        }catch (NullPointerException e){
-            System.out.println("Nothing Stored will try later.....");
-        }
+        LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
 
         MonumentList MonList = new MonumentList();
         monumentList = MonList.getMonList();
+
+        checkTriggerData();
     }
 
     @Override
@@ -50,13 +46,17 @@ public class StepMonumentTrigger implements TriggerTemplate {
         // for loop to keep checking in cases the step count is above a certain monument
         for(int i = 1, j = 0; i < monumentList.size(); i++, j++){
             // Check if step counter is greater then monument, if it is then it continues to the next monument.
-         if(stepcount < monumentList.get(i).getStep()){
+         if(LastestStep.get(0).getStepCount() < monumentList.get(i).getStep()){
                 System.out.println("Too Many Steps for this monument");
          }else{
              //Sets the monument name from the previous monument
              MonumentItem = monumentList.get(j).getName();
              System.out.println("Monument Found! :)");
          }
+        }
+
+        if(!MonumentItem.equals("None")){
+            informNotificationManager();
         }
     }
 
