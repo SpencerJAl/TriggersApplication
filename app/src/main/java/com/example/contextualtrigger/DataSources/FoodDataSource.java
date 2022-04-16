@@ -13,15 +13,17 @@ public class FoodDataSource {
 
     //Could add more
     private void createList(){
-        Food f1 = new Food("Apple", 200);
-        Food f2 = new Food("Chocolate", 400);
-        Food f3 = new Food("Crisps", 340);
-        Food f4 = new Food("Coke", 180);
+        Food f1 = new Food("Apple", 200, 1);
+        Food f2 = new Food("Bar of Chocolate", 400, 2);
+        Food f3 = new Food("Slice of Pizza", 285, 3);
+        Food f4 = new Food("Bottle of Coke", 180,4);
+        Food f5 = new Food("Bag of Kettle Chips", 154, 5);
 
         food.add(f1);
         food.add(f2);
         food.add(f3);
         food.add(f4);
+        food.add(f5);
     }
 
 

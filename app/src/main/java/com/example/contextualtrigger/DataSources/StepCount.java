@@ -1,25 +1,20 @@
 package com.example.contextualtrigger.DataSources;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
+
 import android.content.Context;
-import android.content.Intent;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.TriggerEvent;
-import android.hardware.TriggerEventListener;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
-import com.example.contextualtrigger.MainActivity;
 import com.example.contextualtrigger.R;
 
 import java.time.LocalDateTime;

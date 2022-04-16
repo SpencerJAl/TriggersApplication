@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity{
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //Adds the step counter to the front end UI (From StepCount)
         textViewStepCounter = findViewById(R.id.textViewStepCounter);
-        textViewStepCounter.setText("Counter Sensor Found");
+        textViewStepCounter.setText("Counter Sensor Not Found");
         //counter = stepCount;
         //textViewStepCount = Integer.toString(counter);
         //((TextView)textViewStepCounter).setText(textViewStepCount);

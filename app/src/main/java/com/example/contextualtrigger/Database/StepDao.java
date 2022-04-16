@@ -23,10 +23,8 @@ public interface StepDao {
     @Query("UPDATE Steps SET StepCount=:newCount WHERE date=:current_date")
     void updateStep(int newCount, String current_date);
 
-
-
-
-
+    @Query("SELECT * FROM Steps ORDER BY date DESC LIMIT 1")
+    List<StepTable> getStepByDate(String steps);
 
 }
 

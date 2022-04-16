@@ -1,15 +1,15 @@
 package com.example.contextualtrigger.DataSources;
 
-public class Food {
+public class MonList {
 
     public int ID;
     public String Name;
-    public int Calorie;
+    public int Step;
 
-    public Food(String name, int calorie, int id){
+    public MonList(String name, int step, int id){
         ID = id;
         Name = name;
-        Calorie = calorie;
+        Step = step;
     }
     public int getID() {return ID;}
 
@@ -23,11 +23,11 @@ public class Food {
         Name = name;
     }
 
-    public int getCalorie() {
-        return Calorie;
+    public int getStep() {
+        return Step;
     }
 
-    public void setCalorie(int calorie) {
-        Calorie = calorie;
+    public void setStep(int step) {
+        Step = step;
     }
 }
