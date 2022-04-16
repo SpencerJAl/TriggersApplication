@@ -1,4 +1,4 @@
-package com.example.contextualtrigger.BroadcastReceiver;
+package com.example.contextualtrigger.DataSources;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

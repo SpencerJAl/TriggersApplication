@@ -2,10 +2,11 @@ package com.example.contextualtrigger.Triggers;
 
 import android.content.Context;
 
+import com.example.contextualtrigger.DataSources.MonumentList;
 import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
-import com.example.contextualtrigger.DataSources.MonList;
-import com.example.contextualtrigger.Notifications.NotiManager;
+import com.example.contextualtrigger.CustomDataTypes.MonList;
+import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class StepMonumentTrigger implements TriggerTemplate {
     TriggerDatabase triggerDatabase;
     public String MonumentItem;
     int stepcount = 0;
-    List<MonList> MonumentList;
+    List<MonList> monumentList;
     List<StepTable> LastestStep;
 
 
@@ -34,23 +35,26 @@ public class StepMonumentTrigger implements TriggerTemplate {
         //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
         try {
-            LastestStep = triggerDatabase.stepDao().getStepByDate(getDate());
+            LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
             checkTriggerData();
         }catch (NullPointerException e){
             System.out.println("Nothing Stored will try later.....");
         }
+
+        MonumentList MonList = new MonumentList();
+        monumentList = MonList.getMonList();
     }
 
     @Override
     public void checkTriggerData() {
         // for loop to keep checking in cases the step count is above a certain monument
-        for(int i = 1, j = 0; i < MonumentList.size(); i++, j++){
+        for(int i = 1, j = 0; i < monumentList.size(); i++, j++){
             // Check if step counter is greater then monument, if it is then it continues to the next monument.
-         if(stepcount < MonumentList.get(i).Step){
+         if(stepcount < monumentList.get(i).getStep()){
                 System.out.println("Too Many Steps for this monument");
          }else{
              //Sets the monument name from the previous monument
-             MonumentItem = MonumentList.get(j).Name;
+             MonumentItem = monumentList.get(j).getName();
              System.out.println("Monument Found! :)");
          }
         }

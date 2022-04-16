@@ -66,8 +66,7 @@ public class StepCount extends Activity implements SensorEventListener {
             stepCount = stepCount + value;
         }
 
-        Toast.makeText(MainContext,"Event triggered",Toast.LENGTH_LONG).show();
-        System.out.println("The Step count: " + stepCount);
+        storeData();
     }
 
     @Override
@@ -85,8 +84,6 @@ public class StepCount extends Activity implements SensorEventListener {
             StepTable entry = new StepTable(stepCount,10000,date);
             triggerDatabase.stepDao().insertSteps(entry);
         }
-
-        System.out.println(triggerDatabase.stepDao().getSteps().get(0).getStepCount());
     }
 
     //Gets the Current date and returns it
