@@ -78,6 +78,12 @@ public class NotiManager {
 
     }
 
+    public void DNDNotifications(Context context){
+        getCurrentTime();
+
+    }
+
+
     //Creates Instance of the needed notification
     //Get gets the builder for it
     //Then tells the notification manager to show it
@@ -165,4 +171,5 @@ public class NotiManager {
             timePassed = (int) java.time.Duration.between(lastNotificationTime, nowNotificationTime).toMinutes();
         }
     }
+
 }
