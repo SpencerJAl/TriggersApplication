@@ -15,13 +15,16 @@ import com.example.contextualtrigger.Notifications.LowActivityNotification;
 import com.example.contextualtrigger.Notifications.StepMonumentNotification;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class NotiManager {
 
     private LocalDateTime lastNotificationTime;
     private LocalDateTime nowNotificationTime;
+    private LocalTime hourTime;
     private int timePassed = 0;
     private int timeDelay = 2;
+    private int interruptionFilter = NotificationManager.INTERRUPTION_FILTER_ALL;
     private boolean initialNotification = true;
 
     private static final String CHANNEL_1_ID = "1";
@@ -64,8 +67,17 @@ public class NotiManager {
             //System.out.println(timeDelay);
             //need to find a way to add delay between noti's
             //Time Delay - Time Passed = time to actual delay.
+        }
 
-
+        if (hourTime.getHour() > 22 && hourTime.getHour() < 0) {
+            interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
+            System.out.println("Triggers can't be sent");
+        }else if (hourTime.getHour() > 0 && hourTime.getHour() < 7){
+            interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
+            System.out.println("Triggers can't be sent");
+        }else{
+            interruptionFilter = NotificationManager.INTERRUPTION_FILTER_ALL;
+            System.out.println("Triggers can be sent");
         }
 
         if (triggerName.equals("1")) {
@@ -81,11 +93,6 @@ public class NotiManager {
         }
 
         initialNotification = false;
-
-    }
-
-    public void DNDNotifications(Context context){
-        getCurrentTime();
 
     }
 
