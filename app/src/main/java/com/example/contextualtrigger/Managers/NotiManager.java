@@ -25,6 +25,7 @@ public class NotiManager {
     private int timePassed = 0;
     private int timeDelay = 2;
     private int interruptionFilter = NotificationManager.INTERRUPTION_FILTER_ALL;
+    private int zenMode = 0;
     private boolean initialNotification = true;
 
     private static final String CHANNEL_1_ID = "1";
@@ -69,27 +70,36 @@ public class NotiManager {
             //Time Delay - Time Passed = time to actual delay.
         }
 
-        if (hourTime.getHour() > 22 && hourTime.getHour() < 0) {
+        if (hourTime.getHour() > 22 && hourTime.getHour() < 00) {
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
+            zenMode = 1;
             System.out.println("Triggers can't be sent");
-        }else if (hourTime.getHour() > 0 && hourTime.getHour() < 7){
+        }else if (hourTime.getHour() > 00 && hourTime.getHour() < 07){
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
+            zenMode = 1;
             System.out.println("Triggers can't be sent");
         }else{
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_ALL;
+            zenMode = 3;
             System.out.println("Triggers can be sent");
         }
 
-        if (triggerName.equals("1")) {
-            displayNoti1(Display_Title, Display_Content);
-        } else if (triggerName.equals("2")) {
-            displayNoti2(Display_Title, Display_Content);
-        } else if (triggerName.equals("3")) {
-            displayNoti3(Display_Title, Display_Content);
-        } else if (triggerName.equals("4")) {
-            displayNoti4(Display_Title, Display_Content);
-        } else if (triggerName.equals("5")) {
-            displayNoti5(Display_Title, Display_Content);
+        if(zenMode == 3) {
+
+
+            if (triggerName.equals("1")) {
+                displayNoti1(Display_Title, Display_Content);
+            } else if (triggerName.equals("2")) {
+                displayNoti2(Display_Title, Display_Content);
+            } else if (triggerName.equals("3")) {
+                displayNoti3(Display_Title, Display_Content);
+            } else if (triggerName.equals("4")) {
+                displayNoti4(Display_Title, Display_Content);
+            } else if (triggerName.equals("5")) {
+                displayNoti5(Display_Title, Display_Content);
+            }
+        }else{
+            System.out.println("Triggers can't be sent due to time of day.");
         }
 
         initialNotification = false;
