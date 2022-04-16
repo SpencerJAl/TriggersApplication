@@ -1,4 +1,4 @@
-package com.example.contextualtrigger.DataSources;
+package com.example.contextualtrigger.CustomDataTypes;
 
 public class Food {
 

@@ -24,7 +24,7 @@ public interface StepDao {
     void updateStep(int newCount, String current_date);
 
     @Query("SELECT * FROM Steps ORDER BY date DESC LIMIT 1")
-    List<StepTable> getStepByDate(String steps);
+    List<StepTable> getStepByDate();
 
 }
 

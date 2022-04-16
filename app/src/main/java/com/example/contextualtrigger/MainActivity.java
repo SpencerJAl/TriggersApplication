@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
@@ -20,12 +19,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 
-import com.example.contextualtrigger.AlarmManager.AlarmHandler;
 import com.example.contextualtrigger.DataSources.StepCount;
 import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
-import com.example.contextualtrigger.Notifications.NotiManager;
-import com.example.contextualtrigger.Triggers.TriggerManager;
+import com.example.contextualtrigger.Managers.DataSourceManager;
+import com.example.contextualtrigger.Managers.NotiManager;
+import com.example.contextualtrigger.Managers.TriggerManager;
 import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.util.List;
@@ -58,10 +57,11 @@ public class MainActivity extends AppCompatActivity{
         List<StepTable> list = DB.stepDao().getSteps();
 
         //Sets up the alarm manager when the application is first ran
-        AlarmHandler alarmHandler = new AlarmHandler(this);
-        alarmHandler.cancelAlarmManager();
-        alarmHandler.setAlarmManager();
+        DataSourceManager dataSourceManager = new DataSourceManager(this);
+        dataSourceManager.cancelAlarmManager();
+        dataSourceManager.setAlarmManager();
 
+        //Sets up the Trigger manager when application is first ran
         TriggerManager triggerManager = new TriggerManager(this);
         triggerManager.startTriggerWorkers();
 
