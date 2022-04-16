@@ -18,7 +18,7 @@ public class CalorieTrigger implements TriggerTemplate {
     Context MainContext;
     TriggerDatabase triggerDatabase;
     public Double Calories;
-    public String Food;
+    public String Food = "None";
     int stepcount = 0;
     List<Food> food;
     List<StepTable> LastestStep;
@@ -31,23 +31,21 @@ public class CalorieTrigger implements TriggerTemplate {
 
     @Override
     public void getTriggerData(Context context) {
-        System.out.println("In monument trigger");
+        System.out.println("In calorie trigger");
         //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
-        try {
-            LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
-            checkTriggerData();
-        }catch (NullPointerException e){
-            System.out.println("Nothing Stored will try later.....");
-        }
+
+        LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
 
         FoodDataSource foodData = new FoodDataSource();
         food = foodData.getFood();
+
+        checkTriggerData();
     }
 
     @Override
     public void checkTriggerData() {
-        Calories = stepcount * 0.04;
+        Calories = LastestStep.get(0).getStepCount() * 0.04;
         for(int i = 1, j = 0; i < food.size(); i++, j++){
             // Check if step counter is greater then monument, if it is then it continues to the next monument.
             if(Calories < food.get(i).getCalorie()){
@@ -58,12 +56,16 @@ public class CalorieTrigger implements TriggerTemplate {
                 System.out.println("Too Many Steps for this monument");
             }
         }
+
+        if(!Food.equals("None")){
+            informNotificationManager();
+        }
     }
 
     @Override
     public void informNotificationManager() {
         NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("1", "Calories Burned", "Well done you have burned " + Calories + " calories keep going, it's enough for a " + Food);
+        notiManager.sendNotification("1", "Calories Burned", "You have burned " + Calories + " calories keep going, it's enough for a " + Food);
     }
 
     public String getDate(){

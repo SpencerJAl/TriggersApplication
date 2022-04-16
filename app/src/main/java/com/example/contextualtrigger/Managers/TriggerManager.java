@@ -55,26 +55,26 @@ public class TriggerManager {
         weatherTriggerRequest = new PeriodicWorkRequest.Builder(WeatherWorker.class, 1, TimeUnit.HOURS)
                 .setConstraints(LowConstraints)
                 .addTag("WeatherWorker")
-                .setInitialDelay(2, TimeUnit.MINUTES)
+                .setInitialDelay(3, TimeUnit.MINUTES)
                 .build();
 
 
        locationTriggerRequest = new PeriodicWorkRequest.Builder(LocationWorker.class, 1, TimeUnit.HOURS)
                 .setConstraints(LowConstraints)
                 .addTag("LocationWorker")
-                .setInitialDelay(3, TimeUnit.MINUTES)
+                .setInitialDelay(4, TimeUnit.MINUTES)
                 .build();
 
        calorieTriggerRequest = new PeriodicWorkRequest.Builder(CalorieWorker.class, 1,TimeUnit.HOURS)
                .setConstraints(LowConstraints)
                .addTag("CalorieWorker")
-               .setInitialDelay(4, TimeUnit.MINUTES)
+               .setInitialDelay(1, TimeUnit.MINUTES)
                .build();
 
        stepMonumentTriggerRequest = new PeriodicWorkRequest.Builder(StepMonumentWorker.class, 1,TimeUnit.HOURS)
                .setConstraints(LowConstraints)
                .addTag("StepMonumentWorker")
-               .setInitialDelay(5, TimeUnit.MINUTES)
+               .setInitialDelay(2, TimeUnit.MINUTES)
                .build();
 
        activityTriggerRequest = new PeriodicWorkRequest.Builder(LowActivityWorker.class, 1 , TimeUnit.HOURS)
@@ -90,10 +90,14 @@ public class TriggerManager {
 
         WorkManager.getInstance(MainContext).enqueue(locationTriggerRequest);
 
-        //WorkManager.getInstance(MainContext).enqueue(calorieTriggerRequest);
+        WorkManager.getInstance(MainContext).enqueue(calorieTriggerRequest);
 
-        //WorkManager.getInstance(MainContext).enqueue(stepMonumentTriggerRequest);
+        WorkManager.getInstance(MainContext).enqueue(stepMonumentTriggerRequest);
 
         // WorkManager.getInstance(MainContext).enqueue(activityTriggerRequest);
+    }
+
+    public void clearAllWork(){
+        WorkManager.getInstance(MainContext).cancelAllWork();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.contextualtrigger.Managers;
 
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -16,6 +17,7 @@ import com.example.contextualtrigger.Notifications.StepMonumentNotification;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import android.os.Handler;
 
 public class NotiManager {
 
@@ -23,8 +25,10 @@ public class NotiManager {
     private LocalDateTime nowNotificationTime;
     private LocalTime hourTime;
     private int timePassed = 0;
-    private int timeDelay = 2;
+    private int timeDelay = 0; //In Minuets
+    private int actualDelay = 0;
     private int interruptionFilter = NotificationManager.INTERRUPTION_FILTER_ALL;
+    private Handler handler = new Handler();
     private int zenMode = 0;
     private boolean initialNotification = true;
 
@@ -63,18 +67,19 @@ public class NotiManager {
         if (!initialNotification) {
             calcTimeDifference();
         }
-        if (timePassed < timeDelay & !initialNotification) { //if the time that has passed isnt as much as the delay then sleep.
-            //System.out.println(timePassed);
-            //System.out.println(timeDelay);
-            //need to find a way to add delay between noti's
-            //Time Delay - Time Passed = time to actual delay.
+
+        if (timePassed < timeDelay & !initialNotification) {
+            actualDelay = timeDelay - timePassed;
+            System.out.println(actualDelay);
+        } else {
+            actualDelay = 0;
         }
 
-        if (hourTime.getHour() > 22 && hourTime.getHour() < 00) {
+        if (hourTime.getHour() >= 24 && hourTime.getHour() <= 24 && hourTime.getMinute() <= 59) {
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
             zenMode = 1;
             System.out.println("Triggers can't be sent");
-        }else if (hourTime.getHour() > 00 && hourTime.getHour() < 07){
+        }else if (hourTime.getHour() >= 0 && hourTime.getHour() <= 7){
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
             zenMode = 1;
             System.out.println("Triggers can't be sent");
@@ -85,8 +90,6 @@ public class NotiManager {
         }
 
         if(zenMode == 3) {
-
-
             if (triggerName.equals("1")) {
                 displayNoti1(Display_Title, Display_Content);
             } else if (triggerName.equals("2")) {
@@ -98,12 +101,11 @@ public class NotiManager {
             } else if (triggerName.equals("5")) {
                 displayNoti5(Display_Title, Display_Content);
             }
-        }else{
+        }else {
             System.out.println("Triggers can't be sent due to time of day.");
         }
 
         initialNotification = false;
-
     }
 
 
@@ -113,31 +115,42 @@ public class NotiManager {
     private void displayNoti1(String title, String content) {
         CalorieNotification notificationCalorie = new CalorieNotification(MainContext, CHANNEL_1_ID, title, content);
         NotificationCompat.Builder notifyBuilder = notificationCalorie.getNotificationBuilder();
-        mNotifyManager.notify(NOTIFICATION_1_ID, notifyBuilder.build());
+        handler.postDelayed(notifyManager(NOTIFICATION_1_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti2(String title, String content) {
         StepMonumentNotification stepMonumentNotification = new StepMonumentNotification(MainContext, CHANNEL_2_ID, title, content);
         NotificationCompat.Builder notifyBuilder = stepMonumentNotification.getNotificationBuilder();
-        mNotifyManager.notify(NOTIFICATION_2_ID, notifyBuilder.build());
+        handler.postDelayed(notifyManager(NOTIFICATION_2_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti3(String title, String content) {
         LowActivityNotification lowActivityNotification = new LowActivityNotification(MainContext, CHANNEL_1_ID, title, content);
         NotificationCompat.Builder notifyBuilder = lowActivityNotification.getNotificationBuilder();
-        mNotifyManager.notify(NOTIFICATION_3_ID, notifyBuilder.build());
+        handler.postDelayed(notifyManager(NOTIFICATION_3_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti4(String title, String content) {
         GoodWeatherNotification goodWeatherNotification = new GoodWeatherNotification(MainContext, CHANNEL_3_ID, title, content);
         NotificationCompat.Builder notifyBuilder = goodWeatherNotification.getNotificationBuilder();
-        mNotifyManager.notify(NOTIFICATION_4_ID, notifyBuilder.build());
+        handler.postDelayed(notifyManager(NOTIFICATION_4_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti5(String title, String content) {
         LocationNotification locationNotification = new LocationNotification(MainContext, CHANNEL_2_ID, title, content);
         NotificationCompat.Builder notifyBuilder = locationNotification.getNotificationBuilder();
-        mNotifyManager.notify(NOTIFICATION_5_ID, notifyBuilder.build());
+        handler.postDelayed(notifyManager(NOTIFICATION_5_ID, notifyBuilder.build()), (long) actualDelay * 60000);
+
+    }
+
+    private Runnable notifyManager(int NOTIFICATION_ID, Notification notification){
+        Runnable notiDelay = new Runnable() {
+            @Override
+            public void run() {
+                mNotifyManager.notify(NOTIFICATION_ID,notification);
+            }
+        };
+        return  notiDelay;
     }
 
     //Notification Channel for High Importance notifications
@@ -180,6 +193,8 @@ public class NotiManager {
     }
 
     private void getCurrentTime() {
+        hourTime = LocalTime.now();
+
         if (initialNotification) {
             lastNotificationTime = LocalDateTime.now();
         } else {
