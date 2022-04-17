@@ -25,7 +25,7 @@ public class NotiManager {
     private LocalDateTime nowNotificationTime;
     private LocalTime hourTime;
     private int timePassed = 0;
-    private int timeDelay = 0; //In Minuets
+    private int timeDelay = 10; //10 minute delay between notifications
     private int actualDelay = 0;
     private int interruptionFilter = NotificationManager.INTERRUPTION_FILTER_ALL;
     private Handler handler = new Handler();
@@ -114,25 +114,25 @@ public class NotiManager {
     //Get gets the builder for it
     //Then tells the notification manager to show it
     private void displayNoti1(String title, String content) {
-        CalorieNotification notificationCalorie = new CalorieNotification(MainContext, CHANNEL_1_ID, title, content);
+        CalorieNotification notificationCalorie = new CalorieNotification(MainContext, CHANNEL_3_ID, title, content);
         NotificationCompat.Builder notifyBuilder = notificationCalorie.getNotificationBuilder();
         handler.postDelayed(notifyManager(NOTIFICATION_1_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti2(String title, String content) {
-        StepMonumentNotification stepMonumentNotification = new StepMonumentNotification(MainContext, CHANNEL_2_ID, title, content);
+        StepMonumentNotification stepMonumentNotification = new StepMonumentNotification(MainContext, CHANNEL_3_ID, title, content);
         NotificationCompat.Builder notifyBuilder = stepMonumentNotification.getNotificationBuilder();
         handler.postDelayed(notifyManager(NOTIFICATION_2_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti3(String title, String content) {
-        TimeNotification timeNotification = new TimeNotification(MainContext, CHANNEL_1_ID, title, content);
+        TimeNotification timeNotification = new TimeNotification(MainContext, CHANNEL_2_ID, title, content);
         NotificationCompat.Builder notifyBuilder = timeNotification.getNotificationBuilder();
         handler.postDelayed(notifyManager(NOTIFICATION_3_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
     private void displayNoti4(String title, String content) {
-        GoodWeatherNotification goodWeatherNotification = new GoodWeatherNotification(MainContext, CHANNEL_3_ID, title, content);
+        GoodWeatherNotification goodWeatherNotification = new GoodWeatherNotification(MainContext, CHANNEL_1_ID, title, content);
         NotificationCompat.Builder notifyBuilder = goodWeatherNotification.getNotificationBuilder();
         handler.postDelayed(notifyManager(NOTIFICATION_4_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }

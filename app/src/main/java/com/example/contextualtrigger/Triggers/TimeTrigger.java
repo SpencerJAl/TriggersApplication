@@ -35,7 +35,7 @@ public class TimeTrigger implements TriggerTemplate {
     public void getTriggerData(Context context) {
         currentHour = LocalTime.now();
 
-        if(currentHour.getHour() == 9 || currentHour.getHour() == 17){ //if its 9am or 5 pm, get triiger info
+        if(currentHour.getHour() == 9 || (currentHour.getHour() >= 17 && currentHour.getHour() < 21)){ //if its 9am or 5 pm, get triiger info
             triggerDatabase = TriggerDatabase.getInstance(context);
 
             StepsTable = triggerDatabase.stepDao().getStepsFromDate(getDate());
