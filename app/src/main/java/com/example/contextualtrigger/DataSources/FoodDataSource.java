@@ -13,7 +13,7 @@ public class FoodDataSource {
         createList();
     }
 
-    //Could add more
+    //List of food's and calorie totals
     private void createList(){
         Food f1 = new Food("Apple", 200, 1);
         Food f2 = new Food("Bar of Chocolate", 400, 2);

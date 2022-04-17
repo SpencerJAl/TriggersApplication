@@ -19,6 +19,7 @@ public class StepMonumentWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        //Execute step monument trigger
         StepMonumentTrigger SMT = new StepMonumentTrigger(mainContext);
         SMT.getTriggerData(mainContext);
         return Result.success();

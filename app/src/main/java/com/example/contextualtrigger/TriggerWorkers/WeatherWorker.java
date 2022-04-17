@@ -20,10 +20,9 @@ public class WeatherWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        //Execute weather trigger
         GoodWeatherTrigger gd = new GoodWeatherTrigger(mainContext);
         gd.getTriggerData(mainContext);
-
-
         return Result.success();
 
     }

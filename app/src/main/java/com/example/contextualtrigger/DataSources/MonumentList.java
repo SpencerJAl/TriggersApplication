@@ -13,7 +13,7 @@ public class MonumentList {
         createList();
     }
 
-    //Could add more
+    //List of monuments and step total
     private void createList(){
         MonList f1 = new MonList("Christ the Redeemer", 220, 0);
         MonList f2 = new MonList("Big Ben", 334, 1);

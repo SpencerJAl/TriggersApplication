@@ -20,6 +20,7 @@ public class CalorieWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        //Execute calorie trigger
         CalorieTrigger CT = new CalorieTrigger(mainContext);
         CT.getTriggerData(mainContext);
 

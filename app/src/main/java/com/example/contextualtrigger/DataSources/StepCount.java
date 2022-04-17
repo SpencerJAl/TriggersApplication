@@ -31,7 +31,8 @@ public class StepCount extends Activity implements SensorEventListener {
     boolean isCounterSensorPresent;
     Context MainContext;
 
-    // controls how to count the steps in the application.
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,9 +52,9 @@ public class StepCount extends Activity implements SensorEventListener {
 
     }
 
+    //When a step event happens this is called.
     @Override
     public void onSensorChanged(SensorEvent event) {
-        //handle step count here
         Sensor sensor = event.sensor;
         float[] values = event.values;
         int value = -1;
@@ -75,6 +76,7 @@ public class StepCount extends Activity implements SensorEventListener {
     }
 
 
+    //Store the steps in the database
     private void storeData(){
         String date = getDate();
         List<StepTable> steps = triggerDatabase.stepDao().getStepsFromDate(date);

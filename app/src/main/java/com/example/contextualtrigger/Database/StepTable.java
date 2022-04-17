@@ -7,6 +7,8 @@ import androidx.room.PrimaryKey;
 @Entity (tableName = "Steps")
 
 public class StepTable {
+
+    //Table used to store the users step total, goal etc
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     private int id;

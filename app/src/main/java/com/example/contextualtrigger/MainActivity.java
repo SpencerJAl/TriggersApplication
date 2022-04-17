@@ -33,15 +33,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
     private TextView textViewStepCounter;
-    private String textViewStepCount;
     private SensorManager sensorManager;
-    private Sensor mStepCounter;
-    private boolean isCounterSensorPresent;
     private int LOCATION_PERMISSION_CODE = 1, counter = 0;
-    StepCount stepCount;
     NotiManager notiManager;
     TriggerDatabase DB;
-    //private RequestQueue queue;
 
 
     @Override
@@ -52,10 +47,12 @@ public class MainActivity extends AppCompatActivity{
         getSupportActionBar().hide();
 
         //sets up the notification manager
-        notiManager = NotiManager.getNotiManagerInstance(this); //use NotiManager.getNotiManagerInstance(context) to access the notification manager, it makes sure that there is only ever 1 instance of it.
+        notiManager = NotiManager.getNotiManagerInstance(this);
 
         //sets up the database
         DB = TriggerDatabase.getInstance(getApplicationContext());
+
+        //Insert dummy step data (For dummy runs)
         insertDummyData();
 
 
@@ -70,44 +67,22 @@ public class MainActivity extends AppCompatActivity{
         triggerManager.startTriggerWorkers();
 
 
-        //Code for the step counter.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //Adds the step counter to the front end UI (From StepCount)
+
+        //Gets test view from UI , to show if a sensor is found
         textViewStepCounter = findViewById(R.id.textViewStepCounter);
-        textViewStepCounter.setText("Counter Sensor Not Found");
-        //counter = stepCount;
-        //textViewStepCount = Integer.toString(counter);
-        //((TextView)textViewStepCounter).setText(textViewStepCount);
 
         //Determines if the sensor is found on the phone.
-        //sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        //if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
-         //   mStepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-          //  isCounterSensorPresent = true;
-           // textViewStepCounter.setText("Counter Sensor Found");
-        //}else{
-         //   textViewStepCounter.setText("Counter Sensor Not Found");
-          //  isCounterSensorPresent = false;
-        //}
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
+            textViewStepCounter.setText("Counter Sensor Found");
+        }else{
+           textViewStepCounter.setText("Counter Sensor Not Found");
+        }
 
-
-
-
-        findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NotificationBuilder.Companion.with(MainActivity.this).asBigText(bigText -> {
-                    bigText.setTitle("You have completed milestone one");
-                    bigText.setText("1000 steps completed");
-                    bigText.setExpandedText("");
-                    bigText.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground));
-                    return null;
-                }).show();
-            }
-        });
-
+        //Check to see if we have the permissions to access the user location
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            requestLocationPermission();
+            requestLocationPermission(); //If we don't have permission request it
         }
     }
 
@@ -139,16 +114,15 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    //Insert a dummy step entry (so that we don't need walk about everytime we want to test it)
     private void insertDummyData(){
         TriggerDatabase db = TriggerDatabase.getInstance(MainActivity.this);
         List<StepTable> stepTable = db.stepDao().getStepsFromDate(getDate());
-        System.out.println("Table size" + stepTable.size());
 
         if(stepTable.size() == 0){
             StepTable entry = new StepTable(5000, 10000, getDate());
             DB.stepDao().insertSteps(entry);
         } else if (stepTable.size() > 0){
-            System.out.println(stepTable.get(0).getStepCount());
             DB.stepDao().updateStep(5000, getDate());
         }
     }
@@ -158,6 +132,7 @@ public class MainActivity extends AppCompatActivity{
         super.onResume();
     }
 
+    //Returns the current date when called
     public String getDate(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();

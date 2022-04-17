@@ -8,6 +8,7 @@ import com.example.contextualtrigger.DataSources.StepCount;
 
 public class StepCountReceiver extends BroadcastReceiver {
 
+    //Starts the step counter trigger
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent service = new Intent(context,StepCount.class);

@@ -7,11 +7,11 @@ import androidx.core.app.NotificationCompat;
 import com.example.contextualtrigger.Interfaces.NotificationTemplate;
 import com.example.contextualtrigger.R;
 
-public class LowActivityNotification implements NotificationTemplate {
+public class TimeNotification implements NotificationTemplate {
 
     NotificationCompat.Builder notifyBuilder;
 
-    public LowActivityNotification(Context context, String CHANNEL_ID, String title, String content){
+    public TimeNotification(Context context, String CHANNEL_ID, String title, String content){
         createBuilder(context, CHANNEL_ID,title,content);
     }
 
