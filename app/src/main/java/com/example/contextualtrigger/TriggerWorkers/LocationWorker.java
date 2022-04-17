@@ -21,6 +21,7 @@ public class LocationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        //Execute location trigger
         LocationTrigger lc = new LocationTrigger(mainContext);
         lc.getTriggerData(mainContext);
         return Result.success();

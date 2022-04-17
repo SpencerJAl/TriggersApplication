@@ -18,7 +18,7 @@ public class GoodWeatherNotification implements NotificationTemplate {
     public void createBuilder(Context MainContext, String CHANNEL_ID, String title, String content){
         notifyBuilder = new NotificationCompat.Builder(MainContext, CHANNEL_ID)
                 .setContentTitle(title)
-                .setContentText(content)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .setSmallIcon(R.drawable.notification_icon);
 
     }

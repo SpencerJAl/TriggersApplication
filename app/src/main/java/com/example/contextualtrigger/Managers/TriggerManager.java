@@ -4,15 +4,17 @@ import android.content.Context;
 
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.example.contextualtrigger.TriggerWorkers.CalorieWorker;
 import com.example.contextualtrigger.TriggerWorkers.LocationWorker;
-import com.example.contextualtrigger.TriggerWorkers.LowActivityWorker;
+import com.example.contextualtrigger.TriggerWorkers.TimeWorker;
 import com.example.contextualtrigger.TriggerWorkers.StepMonumentWorker;
 import com.example.contextualtrigger.TriggerWorkers.WeatherWorker;
 
+import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 public class TriggerManager {
@@ -25,7 +27,7 @@ public class TriggerManager {
     private PeriodicWorkRequest locationTriggerRequest;
     private PeriodicWorkRequest calorieTriggerRequest;
     private PeriodicWorkRequest stepMonumentTriggerRequest;
-    private PeriodicWorkRequest activityTriggerRequest;
+    private PeriodicWorkRequest timeTriggerRequest;
 
     public TriggerManager(Context context){
         MainContext = context;
@@ -38,6 +40,7 @@ public class TriggerManager {
         queueRequests();
     }
 
+    //Constraints that each trigger worker has to meet to run
     private void buildConstraints(){
         HighConstraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -51,11 +54,12 @@ public class TriggerManager {
     }
 
 
+    //Builds the different requests for each trigger
     private void buildRequests(){
         weatherTriggerRequest = new PeriodicWorkRequest.Builder(WeatherWorker.class, 1, TimeUnit.HOURS)
                 .setConstraints(LowConstraints)
                 .addTag("WeatherWorker")
-                .setInitialDelay(3, TimeUnit.MINUTES)
+                .setInitialDelay(5, TimeUnit.MINUTES)
                 .build();
 
 
@@ -68,7 +72,7 @@ public class TriggerManager {
        calorieTriggerRequest = new PeriodicWorkRequest.Builder(CalorieWorker.class, 1,TimeUnit.HOURS)
                .setConstraints(LowConstraints)
                .addTag("CalorieWorker")
-               .setInitialDelay(1, TimeUnit.MINUTES)
+               .setInitialDelay(3, TimeUnit.MINUTES)
                .build();
 
        stepMonumentTriggerRequest = new PeriodicWorkRequest.Builder(StepMonumentWorker.class, 1,TimeUnit.HOURS)
@@ -77,27 +81,30 @@ public class TriggerManager {
                .setInitialDelay(2, TimeUnit.MINUTES)
                .build();
 
-       activityTriggerRequest = new PeriodicWorkRequest.Builder(LowActivityWorker.class, 1 , TimeUnit.HOURS)
+        timeTriggerRequest = new PeriodicWorkRequest.Builder(TimeWorker.class, 1,TimeUnit.HOURS)
                .setConstraints(LowConstraints)
-               .addTag("LowActivityWorker")
-               .setInitialDelay(6, TimeUnit.MINUTES)
+               .addTag("TimeWorker")
+               .setInitialDelay(1, TimeUnit.MINUTES)
                .build();
 
     }
 
+    //Queue each of the requests to the Work Manager
     private void queueRequests() {
-        WorkManager.getInstance(MainContext).enqueue(weatherTriggerRequest);
-
-        WorkManager.getInstance(MainContext).enqueue(locationTriggerRequest);
+        WorkManager.getInstance(MainContext).enqueue(timeTriggerRequest);
 
         WorkManager.getInstance(MainContext).enqueue(calorieTriggerRequest);
 
         WorkManager.getInstance(MainContext).enqueue(stepMonumentTriggerRequest);
 
-        // WorkManager.getInstance(MainContext).enqueue(activityTriggerRequest);
+        WorkManager.getInstance(MainContext).enqueue(locationTriggerRequest);
+
+        WorkManager.getInstance(MainContext).enqueue(weatherTriggerRequest);
     }
 
+    //Clears all the queued requests (Used on restart)
     public void clearAllWork(){
         WorkManager.getInstance(MainContext).cancelAllWork();
     }
+
 }

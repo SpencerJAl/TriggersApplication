@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.contextualtrigger.Notifications.CalorieNotification;
 import com.example.contextualtrigger.Notifications.GoodWeatherNotification;
 import com.example.contextualtrigger.Notifications.LocationNotification;
-import com.example.contextualtrigger.Notifications.LowActivityNotification;
+import com.example.contextualtrigger.Notifications.TimeNotification;
 import com.example.contextualtrigger.Notifications.StepMonumentNotification;
 
 import java.time.LocalDateTime;
@@ -68,18 +68,19 @@ public class NotiManager {
             calcTimeDifference();
         }
 
+        //Sets the delay between notifications
         if (timePassed < timeDelay & !initialNotification) {
             actualDelay = timeDelay - timePassed;
-            System.out.println(actualDelay);
         } else {
             actualDelay = 0;
         }
 
-        if (hourTime.getHour() >= 24 && hourTime.getHour() <= 24 && hourTime.getMinute() <= 59) {
+        //Makes sure Notifications arent sent at night
+        if (hourTime.getHour() >= 21 && hourTime.getHour() <= 24 && hourTime.getMinute() <= 59) { // 9 pm - 12 am (night)
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
             zenMode = 1;
             System.out.println("Triggers can't be sent");
-        }else if (hourTime.getHour() >= 0 && hourTime.getHour() <= 7){
+        }else if (hourTime.getHour() >= 0 && hourTime.getHour() <= 7){ // 12 am - 7am (early morning)
             interruptionFilter = NotificationManager.INTERRUPTION_FILTER_NONE;
             zenMode = 1;
             System.out.println("Triggers can't be sent");
@@ -125,8 +126,8 @@ public class NotiManager {
     }
 
     private void displayNoti3(String title, String content) {
-        LowActivityNotification lowActivityNotification = new LowActivityNotification(MainContext, CHANNEL_1_ID, title, content);
-        NotificationCompat.Builder notifyBuilder = lowActivityNotification.getNotificationBuilder();
+        TimeNotification timeNotification = new TimeNotification(MainContext, CHANNEL_1_ID, title, content);
+        NotificationCompat.Builder notifyBuilder = timeNotification.getNotificationBuilder();
         handler.postDelayed(notifyManager(NOTIFICATION_3_ID, notifyBuilder.build()), (long) actualDelay * 60000);
     }
 
@@ -192,6 +193,7 @@ public class NotiManager {
         }
     }
 
+    //Gets the current time and stores it
     private void getCurrentTime() {
         hourTime = LocalTime.now();
 
@@ -202,6 +204,7 @@ public class NotiManager {
         }
     }
 
+    //Calculates the time difference between 2 times
     private void calcTimeDifference() {
         if (initialNotification) {
             timePassed = timeDelay + 1;

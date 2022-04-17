@@ -34,7 +34,7 @@ public class LocationTrigger implements TriggerTemplate {
         String date = getDate();
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-        try {
+        try { //Gets the current location info from DB
             List<LocationTable> location = triggerDatabase.locationDao().getTodayLocations(date);
 
             lastKnownLat = location.get(0).getLat();
@@ -50,14 +50,14 @@ public class LocationTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void checkTriggerData() {
+    public void checkTriggerData() { //If current known location = last known location then notify the user
         if(lastKnownLat == currentLat && lastKnownLong == currentLong){
             informNotificationManager();
         }
     }
 
     @Override
-    public void informNotificationManager() {
+    public void informNotificationManager() { //Notify the Notification Manager to send a notification to the user
         NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
         notiManager.sendNotification("5", "Location Hasn't Changed", "Your location hasn't changed in some time, get active and go for a walk");
 

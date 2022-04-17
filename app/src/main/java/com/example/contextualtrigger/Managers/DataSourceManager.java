@@ -18,7 +18,8 @@ public class DataSourceManager {
         this.context = context;
     }
 
-    //Alarm manager to trigger the information sources to execute code at certain times (like every hour even when the application isn't being used)
+    //Alarm manager to schedule when the non-static data sources should be updated
+    //Set to update on initial run and then every hour then on
     public void setAlarmManager(){
 
         Intent weatherAPIIntent = new Intent(context, WeatherAPIinfo.class); //weather api intent
@@ -46,34 +47,14 @@ public class DataSourceManager {
             long runEvery3 = 2 * 60 * 1000; //Run every hour after the initial 30 mins
             am.setRepeating(AlarmManager.RTC_WAKEUP,runAfter3, runEvery3,sender3);
        }
-
-
-       // Intent stepIntent = new Intent(context, StepCount.class);
-       // PendingIntent sender3 = PendingIntent.getBroadcast(context,2, stepIntent, 0);
-       // AlarmManager am3 = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-       // if(am3 != null){
-           // long runAfter3 = 45 * 60 * 1000;// run after the first 45 minutes for testing
-           // long runevery3 = 120 * 60 * 1000;// Run evey 2 hours after intial 45 minutes
-            //am3.setRepeating(AlarmManager.RTC_WAKEUP, runAfter3, runevery3, sender3);
-       // }
-
-        //Intent calorieIntent = new Intent(context, StepCount.class);
-       // PendingIntent sender4 = PendingIntent.getBroadcast(context,2, calorieIntent, 0);
-        //AlarmManager am4 = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        //if(am4 != null){
-         //   long runAfter3 = 180 * 60 * 1000;// run after the first 3 hours for testing
-            //long runevery3 = 360 * 60 * 1000;// Run evey 6 hours after intial 45 minutes
-           // am4.setRepeating(AlarmManager.RTC_WAKEUP, runAfter3, runevery3, sender4);
-        //}
-
     }
 
     //used to cancel the background alarms so there is only ever 2 alarms
     public void  cancelAlarmManager(){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent weatherAPIIntent = new Intent(context, WeatherAPIinfo.class);//weather api intent
         PendingIntent sender = PendingIntent.getBroadcast(context, 2,weatherAPIIntent, 0);
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if(am != null) {
             am.cancel(sender);
         }
@@ -84,20 +65,10 @@ public class DataSourceManager {
             am.cancel(sender2);
         }
 
-        Intent stepIntent = new Intent(context, StepCount.class);
+        Intent stepIntent = new Intent(context, StepCount.class); //Step count data source intent
         PendingIntent sender3 = PendingIntent.getBroadcast(context,2, stepIntent, 0);
-        AlarmManager am3 = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if(am3 != null){
-            am3.cancel(sender3);
+        if(am != null){
+            am.cancel(sender3);
         }
-
-        Intent calorieIntent = new Intent(context, StepCount.class);
-        PendingIntent sender4 = PendingIntent.getBroadcast(context,2, calorieIntent, 0);
-        AlarmManager am4 = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if(am3 != null){
-            am4.cancel(sender4);
-        }
-
-
     }
 }

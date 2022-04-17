@@ -6,13 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.contextualtrigger.Triggers.LowActivityTrigger;
+import com.example.contextualtrigger.Triggers.TimeTrigger;
 
-public class LowActivityWorker extends Worker {
+public class TimeWorker extends Worker {
 
     Context mainContext;
 
-    public LowActivityWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public TimeWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         Context mainContext;
     }
@@ -20,8 +20,9 @@ public class LowActivityWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        LowActivityTrigger LAT = new LowActivityTrigger(mainContext);
-        LAT.getTriggerData(mainContext);
-        return null;
+        //Execute time trigger
+        TimeTrigger TimeT = new TimeTrigger(mainContext);
+        TimeT.getTriggerData(mainContext);
+        return Result.success();
     }
 }

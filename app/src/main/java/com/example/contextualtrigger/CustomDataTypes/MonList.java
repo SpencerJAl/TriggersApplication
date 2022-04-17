@@ -6,6 +6,7 @@ public class MonList {
     public String Name;
     public int Step;
 
+    //Used to Represent a monument item within the framework
     public MonList(String name, int step, int id){
         ID = id;
         Name = name;

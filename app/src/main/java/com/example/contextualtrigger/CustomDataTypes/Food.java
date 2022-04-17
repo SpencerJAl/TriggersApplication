@@ -6,6 +6,7 @@ public class Food {
     public String Name;
     public int Calorie;
 
+    //Used to Represent a food item within the framework
     public Food(String name, int calorie, int id){
         ID = id;
         Name = name;

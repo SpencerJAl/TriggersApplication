@@ -30,8 +30,6 @@ public class StepMonumentTrigger implements TriggerTemplate {
 
     @Override
     public void getTriggerData(Context context) {
-        System.out.println("In monument trigger");
-        //gets the weather data from the database
         triggerDatabase = TriggerDatabase.getInstance(context);
         LastestStep = triggerDatabase.stepDao().getStepsFromDate(getDate());
 
@@ -47,11 +45,10 @@ public class StepMonumentTrigger implements TriggerTemplate {
         for(int i = 1, j = 0; i < monumentList.size(); i++, j++){
             // Check if step counter is greater then monument, if it is then it continues to the next monument.
          if(LastestStep.get(0).getStepCount() < monumentList.get(i).getStep()){
-                System.out.println("Too Many Steps for this monument");
+
          }else{
              //Sets the monument name from the previous monument
              MonumentItem = monumentList.get(j).getName();
-             System.out.println("Monument Found! :)");
          }
         }
 
@@ -61,12 +58,13 @@ public class StepMonumentTrigger implements TriggerTemplate {
     }
 
     @Override
-    public void informNotificationManager() {
+    public void informNotificationManager() { //Notify the Notification Manager to send a notification to the user
         NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
         notiManager.sendNotification("2", "Monument Achieved", "Well done you have completed enough steps to walk up " + MonumentItem);
 
     }
 
+    //Returns the current date when called
     public String getDate(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();

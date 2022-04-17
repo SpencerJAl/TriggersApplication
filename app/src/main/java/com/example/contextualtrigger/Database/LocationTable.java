@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "Locations")
 public class LocationTable {
 
+    //Table to store the locations of the user's phone
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     private int id;

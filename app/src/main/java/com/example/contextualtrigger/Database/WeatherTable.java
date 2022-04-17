@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity (tableName = "weather")
 public class WeatherTable {
 
+    //Table used to store the weather info from the API
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     private int id;

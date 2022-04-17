@@ -149,6 +149,7 @@ public class WeatherAPIinfo extends BroadcastReceiver {
         }
     }
 
+    //Returns true if the date provided by the API already exists within the API
     private boolean findDate(List<WeatherTable> weather, String current_date){
         if(weather.size() == 0){ return false;}
         for(int i = 0; i < weather.size(); i++){
