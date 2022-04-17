@@ -60,7 +60,7 @@ public class CalorieTrigger implements TriggerTemplate {
     @Override
     public void informNotificationManager() { //Notify the Notification Manager to send a notification to the user
         NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("1", "Calories Burned", "You have burned " + Calories + " calories keep going, it's enough for a " + Food);
+        notiManager.sendNotification("1", "Calories Burned", "You have burned " + Calories + " calories, it's the equivalent to a " + Food + " .Keep walking and burn more calories!");
     }
 
     //Get the current date
