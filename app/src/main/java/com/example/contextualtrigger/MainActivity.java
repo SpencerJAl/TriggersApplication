@@ -25,7 +25,6 @@ import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Managers.DataSourceManager;
 import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Managers.TriggerManager;
-import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NotificationBuilder.Companion.with(MainActivity.this).setWork();
         getSupportActionBar().hide();
 
         //sets up the notification manager

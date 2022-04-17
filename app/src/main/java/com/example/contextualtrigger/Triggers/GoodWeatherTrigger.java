@@ -45,7 +45,7 @@ public class GoodWeatherTrigger implements TriggerTemplate {
             //if there is weather data, check to see if the temp > 10 and is one of the weather conditions.
             if (current_Temp > 10.0) {
                 if (current_Conditions.equals("Light Cloud") || current_Conditions.equals("Clear") || current_Conditions.equals("Heavy Cloud")) {
-                    notificationWeather = "Light Cloud"; //current_Conditions;
+                    notificationWeather = current_Conditions;
                     notificationTemp = String.valueOf(Math.round(current_Temp));
                     informNotificationManager();
                 }
