@@ -6,6 +6,7 @@ import com.example.contextualtrigger.Database.LocationTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -58,9 +59,15 @@ public class LocationTrigger implements TriggerTemplate {
 
     @Override
     public void informNotificationManager() {
-        NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("5", "Location Hasn't Changed", "Your location hasn't changed in some time, get active and go for a walk");
-
+       // NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
+       // notiManager.sendNotification("5", "Location Hasn't Changed", "Your location hasn't changed in some time, get active and go for a walk");
+        NotificationBuilder.Companion.with(MainContext).content(
+                text->{
+                    text.setTitle("Location Hasn't Changed");
+                    text.setText("Your location hasn't changed in some time, get active and go for a walk");
+                    return null;
+                }
+        ).show();
     }
 
     //Gets the Current date and returns it

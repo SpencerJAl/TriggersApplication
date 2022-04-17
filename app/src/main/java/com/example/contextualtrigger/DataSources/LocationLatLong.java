@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import com.pradeep.notification_lib.WeatherTriggerAPI;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -52,6 +53,9 @@ public class LocationLatLong extends BroadcastReceiver implements LocationListen
         }
 
         storeLocations(context,Latitude, Longitude);
+
+        WeatherTriggerAPI w = new WeatherTriggerAPI(context);
+        w.fetchLocationIDFromApi(String.valueOf(Latitude),String.valueOf(Longitude));
     }
 
     //Store the lat and long into the database

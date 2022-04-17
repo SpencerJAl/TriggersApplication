@@ -8,6 +8,7 @@ import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.CustomDataTypes.MonList;
 import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -62,9 +63,15 @@ public class StepMonumentTrigger implements TriggerTemplate {
 
     @Override
     public void informNotificationManager() {
-        NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("2", "Monument Achieved", "Well done you have completed enough steps to walk up " + MonumentItem);
-
+      //  NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
+       // notiManager.sendNotification("2", "Monument Achieved", "Well done you have completed enough steps to walk up " + MonumentItem);
+        NotificationBuilder.Companion.with(MainContext).content(
+                text->{
+                    text.setTitle("Monument Achieved");
+                    text.setText("Well done you have completed enough steps to walk up x.");
+                    return null;
+                }
+        ).show();
     }
 
     public String getDate(){

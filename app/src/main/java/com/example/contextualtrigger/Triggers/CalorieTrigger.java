@@ -8,6 +8,7 @@ import com.example.contextualtrigger.Database.StepTable;
 import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,8 +65,15 @@ public class CalorieTrigger implements TriggerTemplate {
 
     @Override
     public void informNotificationManager() {
-        NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("1", "Calories Burned", "You have burned " + Calories + " calories keep going, it's enough for a " + Food);
+       // NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
+       // notiManager.sendNotification("1", "Calories Burned", "You have burned " + Calories + " calories keep going, it's enough for a " + Food);
+        NotificationBuilder.Companion.with(MainContext).content(
+                text->{
+                    text.setTitle("Calories Burned");
+                    text.setText("Well done you have burned x calories keep going.");
+                    return null;
+                }
+        ).show();
     }
 
     public String getDate(){
