@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+import com.pradeep.notification_lib.NotificationBuilder;
 
 public class LowActivityTrigger implements TriggerTemplate {
 
@@ -25,8 +26,14 @@ public class LowActivityTrigger implements TriggerTemplate {
 
     @Override
     public void informNotificationManager() {
-        NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("3", "Low Activity!", "Get up and go for a walk, haven't moved in some time!");
-
+      //  NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
+       // notiManager.sendNotification("3", "Low Activity!", "Get up and go for a walk, haven't moved in some time!");
+        NotificationBuilder.Companion.with(MainContext).content(
+                text->{
+                    text.setTitle("Low Activity!");
+                    text.setText("Get up and go for a walk, haven't moved in some time!");
+                    return null;
+                }
+        ).show();
     }
 }

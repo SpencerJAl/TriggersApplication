@@ -6,6 +6,7 @@ import com.example.contextualtrigger.Database.TriggerDatabase;
 import com.example.contextualtrigger.Database.WeatherTable;
 import com.example.contextualtrigger.Managers.NotiManager;
 import com.example.contextualtrigger.Interfaces.TriggerTemplate;
+import com.pradeep.notification_lib.NotificationBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,8 +53,15 @@ public class GoodWeatherTrigger implements TriggerTemplate {
 
     @Override
     public void informNotificationManager() {
-        NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
-        notiManager.sendNotification("4", "Perfect Weather Conditions", "The weather is excellent for a walk");
+      //  NotiManager notiManager = NotiManager.getNotiManagerInstance(MainContext);
+       // notiManager.sendNotification("4", "Perfect Weather Conditions", "The weather is excellent for a walk");
+        NotificationBuilder.Companion.with(MainContext).content(
+                text->{
+                    text.setTitle("Perfect Weather Conditions");
+                    text.setText("The weather is excellent for a walk");
+                    return null;
+                }
+        ).show();
     }
 
 
